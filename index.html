@@ -238,7 +238,10 @@ svg text{font-family:'Zen Kaku Gothic New'}
 .sheet{background:var(--panel);border:1px solid var(--line);border-bottom:0;border-radius:18px 18px 0 0;padding:20px 18px 30px;width:100%;max-width:480px}
 .sheet .when{font-family:'Bebas Neue';font-size:24px;color:var(--accent);letter-spacing:.03em;margin-bottom:14px}
 .sheet label{font-size:11px;color:var(--muted);font-weight:700;display:block;margin-bottom:6px}
-.sheet select{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--text);font-family:inherit;font-size:14px;margin-bottom:10px}
+.sheet select,.sheet input{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--text);font-family:inherit;font-size:14px;margin-bottom:10px}
+.sheet h3{font-size:16px;font-weight:900;margin-bottom:14px}
+.invitebox{background:#232b1e;border:1px solid #3a4630;border-radius:12px;padding:14px;font-size:13px;line-height:1.9}
+.invitebox code{display:block;background:#101210;border-radius:8px;padding:10px;margin:8px 0;color:var(--accent);font-size:13px;word-break:break-all}
 .sheet .btn-ok{width:100%;padding:13px;font-size:14px}
 .sheet .btn-blk{width:100%;margin-top:8px;background:#2b2320;border:1px solid #4a3c32;color:#c9b8a6;font-weight:700;border-radius:10px;padding:13px;cursor:pointer;font-family:inherit;font-size:13px}
 .sheet .btn-cancel{width:100%;margin-top:8px;background:transparent;border:0;color:var(--muted);font-weight:700;padding:10px;cursor:pointer;font-family:inherit;font-size:13px}
@@ -303,9 +306,10 @@ svg text{font-family:'Zen Kaku Gothic New'}
 <!-- ================= SCREEN 1 : DASHBOARD ================= -->
 <section class="screen on" id="scr-dash">
 <div class="wrap">
-  <div class="pagehead">
+  <div class="pagehead" style="align-items:center">
     <h1>ダッシュボード</h1>
-    <span class="date">2026年7月10日（木）／ 担当：森下トレーナー</span>
+    <span class="date">2026年7月10日（木）／ 森下トレーナー</span>
+    <button class="btn-ok" style="margin-left:auto;padding:9px 16px;font-size:12.5px" onclick="openNewCust()">＋ 新規顧客</button>
   </div>
 
   <div class="kpis">
@@ -756,6 +760,21 @@ svg text{font-family:'Zen Kaku Gothic New'}
   </div>
 </div>
 
+<!-- ===== new customer sheet (trainer) ===== -->
+<div class="sheetbg" id="newcustbg" onclick="if(event.target===this)closeNewCust()">
+  <div class="sheet" id="newcust-body">
+    <h3>新規顧客を登録</h3>
+    <label>名前</label>
+    <input id="nc-name" placeholder="例：田中 一郎">
+    <label>契約日</label>
+    <input type="date" id="nc-date" value="2026-07-10">
+    <label>プラン（月額）</label>
+    <select id="nc-plan"><option>月8回 ¥96,000</option><option>月4回 ¥56,000</option><option>月4回 ¥48,000</option></select>
+    <button class="btn-ok" onclick="createCust()">登録して招待URLを発行</button>
+    <button class="btn-cancel" onclick="closeNewCust()">キャンセル</button>
+  </div>
+</div>
+
 <!-- ===== booking cancel sheet (trainer) ===== -->
 <div class="sheetbg" id="cancelbg" onclick="if(event.target===this)closeCancel()">
   <div class="sheet">
@@ -859,6 +878,21 @@ function addContract(){
   const li=document.createElement('li');
   li.innerHTML='<span class="d">'+d+'</span>'+type+'（'+plan+'）<span class="pr">追加済み</span> <a onclick="this.parentElement.remove()" style="color:var(--red);cursor:pointer;font-size:11px;font-weight:700">取消</a>';
   document.getElementById('contract-log').prepend(li);
+}
+
+// ---- new customer registration ----
+function openNewCust(){document.getElementById('newcustbg').classList.add('on')}
+function closeNewCust(){document.getElementById('newcustbg').classList.remove('on')}
+function createCust(){
+  const name=document.getElementById('nc-name').value||'田中 一郎';
+  const plan=document.getElementById('nc-plan').value;
+  document.getElementById('newcust-body').innerHTML=
+    '<h3>'+name+'さんを登録しました</h3>'
+    +'<div class="invitebox">契約内容（'+plan+'）を記録し、カルテを作成しました。<br>本人用の招待URLはこちら：'
+    +'<code>coach-base.app/c/x7k2-m9pQ-4rTe</code>'
+    +'このURLをコピーして、普段のLINEで'+name.split(' ')[0]+'さんに送ってください。開くと初回アンケート（経路・目標）が表示され、回答がカルテとレベニューシェア集計に自動反映されます。</div>'
+    +'<button class="btn-ok" style="margin-top:12px" onclick="this.textContent=\'コピーしました\'">URLをコピー</button>'
+    +'<button class="btn-cancel" onclick="closeNewCust()">閉じる</button>';
 }
 
 // ---- booking: trainer approve ----
