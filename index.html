@@ -298,6 +298,7 @@ svg text{font-family:'Zen Kaku Gothic New'}
   <span class="navsp"></span>
   <button class="tab on" data-scr="scr-dash">ダッシュボード</button>
   <button class="tab" data-scr="scr-yoyaku">予約管理<span class="badge">2</span></button>
+  <button class="tab" data-scr="scr-cust">顧客</button>
   <button class="tab" data-scr="scr-karte">顧客カルテ</button>
   <button class="tab customer" data-scr="scr-mypage">顧客：マイページ</button>
   <button class="tab customer" data-scr="scr-onboard">顧客：初回アンケート</button>
@@ -339,13 +340,22 @@ svg text{font-family:'Zen Kaku Gothic New'}
     </div>
   </div>
 
-  <div class="alertstrip">
-    <b>解約予兆アラート：2名</b>
-    <span style="color:var(--muted)">佐藤さん（報告が5日途絶）／ 高橋さん（返信間隔が平均の3倍に増加）</span>
-    <span class="pill">対応する</span>
+  <div class="panelbox">
+    <div class="panelhead"><h2>今日ケアすべき顧客（2名）</h2><span class="hint">全員を見るには「顧客」タブへ</span></div>
+    <div class="clist">
+      <div class="ccard">
+        <div class="cc-top"><span class="avatar">佐</span><span class="cc-name">佐藤 健一</span><span class="status s-bad cc-right"><span class="dot"></span>離脱予兆</span></div>
+        <div class="cc-mid">報告が5日間途絶 → 声かけ推奨 ／ 8月更新</div>
+      </div>
+      <div class="ccard">
+        <div class="cc-top"><span class="avatar">高</span><span class="cc-name">高橋 美咲</span><span class="status s-bad cc-right"><span class="dot"></span>離脱予兆</span></div>
+        <div class="cc-mid">返信間隔が平均の3倍に増加 ／ 7月更新・入金未記録</div>
+      </div>
+      <button class="morebtn" onclick="go('scr-cust')">顧客一覧を見る（14名）</button>
+    </div>
   </div>
 
-  <div class="panelbox">
+  <div class="panelbox" id="custpanel" style="display:none">
     <div class="panelhead">
       <h2>顧客一覧（14名）</h2>
       <span class="hint">要ケア順 ／ タップでカルテ</span>
@@ -480,6 +490,18 @@ svg text{font-family:'Zen Kaku Gothic New'}
 </div>
 </section>
 
+<!-- ================= SCREEN 1.2 : CUSTOMER LIST (TRAINER) ================= -->
+<section class="screen" id="scr-cust">
+<div class="wrap">
+  <div class="pagehead" style="align-items:center">
+    <h1>顧客</h1>
+    <span class="date">14名 ／ アクティブ</span>
+    <button class="btn-ok" style="margin-left:auto;padding:9px 16px;font-size:12.5px" onclick="openNewCust()">＋ 新規顧客</button>
+  </div>
+  <div id="cust-holder"></div>
+</div>
+</section>
+
 <!-- ================= SCREEN 1.5 : BOOKING (TRAINER) ================= -->
 <section class="screen" id="scr-yoyaku">
 <div class="wrap">
@@ -564,7 +586,7 @@ svg text{font-family:'Zen Kaku Gothic New'}
 <!-- ================= SCREEN 2 : KARTE ================= -->
 <section class="screen" id="scr-karte">
 <div class="wrap">
-  <span class="backlink" onclick="go('scr-dash')">← 顧客一覧に戻る</span>
+  <span class="backlink" onclick="go('scr-cust')">← 顧客一覧に戻る</span>
 
   <div class="kartehead">
     <div class="bigavatar">山</div>
@@ -1023,6 +1045,13 @@ function updateNav(){
 renderTrainerCal();
 renderCustomerCal();
 updateNav();
+
+// 顧客一覧パネルを「顧客」タブへ移動（ダッシュボードを短く保つ）
+(function(){
+  const p=document.getElementById('custpanel');
+  document.getElementById('cust-holder').appendChild(p);
+  p.style.display='';
+})();
 
 // ---- customer list search & filter ----
 let cfilter='all';
