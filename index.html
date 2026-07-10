@@ -301,7 +301,7 @@ svg text{font-family:'Zen Kaku Gothic New'}
   <button class="tab" data-scr="scr-cust">顧客</button>
   <button class="tab" data-scr="scr-karte">顧客カルテ</button>
   <button class="tab customer" data-scr="scr-mypage">顧客：マイページ</button>
-  <button class="tab customer" data-scr="scr-onboard">顧客：初回アンケート</button>
+  <button class="tab customer" data-scr="scr-onboard">顧客：初回登録</button>
 </nav>
 
 <!-- ================= SCREEN 1 : DASHBOARD ================= -->
@@ -414,9 +414,14 @@ svg text{font-family:'Zen Kaku Gothic New'}
   <div class="panelbox">
     <div class="panelhead">
       <h2>SNS経由・初月レベニューシェア（50%）</h2>
-      <span class="hint">経路＝インスタの顧客のみ自動抽出 ／ 対象は月額プラン1ヶ月分 × 50%（新規1人につき1回だけ。3ヶ月一括払いなどでも1ヶ月分のみが対象）</span>
+      <span class="hint">経路＝インスタの顧客のみ自動抽出（新規1人につき1回だけ）／ 月額プラン＝月額1ヶ月分 × 50%（一括払いでも1ヶ月分に割り戻し）／ 回数券＝初回セッションから30日間の消化回数 × 1回単価 × 50% ／ 単発・体験＝対象外</span>
     </div>
     <div class="clist">
+      <div class="ccard" style="cursor:default;border-color:#8a6c2c">
+        <div class="cc-top"><span class="avatar">西</span><span class="cc-name">西田 拓海</span><span class="cc-right" style="color:var(--amber);font-weight:700;font-size:11px">確定待ち（8/3 集計締め）</span></div>
+        <div class="cc-mid">12回券（1回¥24,000・仮価格）／ 初回セッション 7/5 → 30日間の消化分で算出</div>
+        <div class="cc-bot"><span>現時点の消化 3回 × ¥24,000 × 50%</span><span class="num cc-money" style="color:var(--amber)">見込 ¥36,000</span></div>
+      </div>
       <div class="ccard" style="cursor:default;border-color:#3a4630">
         <div class="cc-top"><span class="avatar">加</span><span class="cc-name">加藤 悠真</span><span class="status s-good cc-right"><span class="dot"></span>今月確定</span></div>
         <div class="cc-mid">契約 2026/6/3 ／ 対象期間 6/3 〜 7/2（初月のみ）</div>
@@ -785,14 +790,22 @@ svg text{font-family:'Zen Kaku Gothic New'}
 <!-- ===== new customer sheet (trainer) ===== -->
 <div class="sheetbg" id="newcustbg" onclick="if(event.target===this)closeNewCust()">
   <div class="sheet" id="newcust-body">
-    <h3>新規顧客を登録</h3>
-    <label>名前</label>
-    <input id="nc-name" placeholder="例：田中 一郎">
+    <h3>新規顧客を招待</h3>
+    <label>プランを選択（お客様側では変更できません）</label>
+    <select id="nc-plan">
+      <optgroup label="月額プラン">
+        <option>月8回 ¥192,000/月</option>
+        <option>月4回 ¥112,000/月</option>
+        <option>月4回 ¥96,000/月</option>
+      </optgroup>
+      <optgroup label="回数券（仮価格・森下さん確認待ち）">
+        <option>12回券 ¥288,000（1回あたり¥24,000）</option>
+        <option>24回券 ¥528,000（1回あたり¥22,000）</option>
+      </optgroup>
+    </select>
     <label>契約日</label>
     <input type="date" id="nc-date" value="2026-07-10">
-    <label>プラン（月額）</label>
-    <select id="nc-plan"><option>月8回 ¥192,000</option><option>月4回 ¥112,000</option><option>月4回 ¥96,000</option></select>
-    <button class="btn-ok" onclick="createCust()">登録して招待URLを発行</button>
+    <button class="btn-ok" onclick="createCust()">このプランで招待URLを発行</button>
     <button class="btn-cancel" onclick="closeNewCust()">キャンセル</button>
   </div>
 </div>
@@ -812,12 +825,23 @@ svg text{font-family:'Zen Kaku Gothic New'}
 <div class="phone">
   <div class="mp-head">
     <div class="hello">はじめまして ／ 森下トレーナー</div>
-    <h1>最初に3つだけ<br>教えてください</h1>
-    <div style="font-size:12px;color:var(--c-muted);font-weight:700;margin-top:6px">1分で終わります。あなた専用のカルテを作るために使います。</div>
+    <h1>登録は1分で<br>終わります</h1>
+  </div>
+
+  <div class="mp-card" style="background:linear-gradient(150deg,#0e6b45,#0a4a30);color:#fff;border:0">
+    <div style="font-size:11px;font-weight:700;opacity:.85;letter-spacing:.06em">森下トレーナーからの招待</div>
+    <div style="font-size:20px;font-weight:900;margin-top:6px">月8回プラン ¥192,000/月</div>
+    <div style="font-size:12px;opacity:.9;margin-top:4px">契約日 2026/7/10 ／ プランは設定済みです（変更のご希望はトレーナーへ）</div>
   </div>
 
   <div class="mp-card">
     <div class="qnum">Q1 ／ 必須</div>
+    <h2>お名前を教えてください</h2>
+    <input class="qtext" id="q0name" placeholder="例：田中 一郎">
+  </div>
+
+  <div class="mp-card">
+    <div class="qnum">Q2 ／ 必須</div>
     <h2>森下トレーナーを何で知りましたか？</h2>
     <div class="qgrid" id="q1">
       <div class="qopt" onclick="qpick(this)">Instagram</div>
@@ -828,7 +852,7 @@ svg text{font-family:'Zen Kaku Gothic New'}
   </div>
 
   <div class="mp-card">
-    <div class="qnum">Q2</div>
+    <div class="qnum">Q3</div>
     <h2>目標を教えてください</h2>
     <div class="qgrid" id="q2">
       <div class="qopt" onclick="qpick(this)">減量したい</div>
@@ -842,12 +866,12 @@ svg text{font-family:'Zen Kaku Gothic New'}
   </div>
 
   <div class="mp-card">
-    <div class="qnum">Q3 ／ 任意</div>
+    <div class="qnum">Q4 ／ 任意</div>
     <h2>気になること・伝えておきたいこと</h2>
     <textarea class="qtext" rows="3" placeholder="例: 腰痛持ちです／夜は21時以降しか空いていません"></textarea>
   </div>
 
-  <button class="mp-reqbtn" style="margin-top:0" onclick="submitSurvey()">回答してはじめる</button>
+  <button class="mp-reqbtn" style="margin-top:0" onclick="submitSurvey()">登録してはじめる</button>
   <div class="obdone" id="obdone"></div>
   <p class="mp-note" style="margin-top:10px">回答はトレーナーだけが見られます。あとからマイページで変更を申請できます。</p>
 </div>
@@ -871,6 +895,10 @@ tabs.forEach(t=>t.addEventListener('click',()=>go(t.dataset.scr)));
   }else if(mode==='customer'){
     tabs.forEach(t=>{if(!t.classList.contains('customer'))t.style.display='none';});
     go('scr-mypage');
+  }else if(mode==='invite'){
+    // 招待URLを開いた新規顧客の視点: 初回登録から始まる
+    tabs.forEach(t=>{if(!t.classList.contains('customer'))t.style.display='none';});
+    go('scr-onboard');
   }
 })();
 
@@ -881,13 +909,16 @@ function qpick(el){
 }
 function submitSurvey(){
   const g=id=>{const s=document.querySelector('#'+id+' .qopt.sel');return s?s.textContent:'未回答';};
+  const nm=document.getElementById('q0name').value||'田中 一郎';
   const route=g('q1'), goal=g('q2');
   const w=document.getElementById('q2w').value;
   const d=document.getElementById('obdone');
   d.style.display='block';
-  d.innerHTML='登録しました。カルテが自動で作成されます。<br>'
+  d.innerHTML='<b>'+nm+'</b>さんの登録が完了しました。カルテが自動作成されます。<br>'
+    +'プラン：<b>月8回 ¥192,000/月</b>（トレーナー設定済み）<br>'
     +'経路：<b>'+route+'</b>（レベニューシェア集計にもこの回答が使われます）<br>'
-    +'目標：<b>'+goal+(w?'・目標体重 '+w+'kg':'')+'</b>';
+    +'目標：<b>'+goal+(w?'・目標体重 '+w+'kg':'')+'</b>'
+    +'<button class="mp-reqbtn" style="margin-top:14px" onclick="go(\'scr-mypage\')">マイページへ進む</button>';
   d.scrollIntoView({behavior:'smooth',block:'center'});
 }
 
@@ -906,13 +937,12 @@ function addContract(){
 function openNewCust(){document.getElementById('newcustbg').classList.add('on')}
 function closeNewCust(){document.getElementById('newcustbg').classList.remove('on')}
 function createCust(){
-  const name=document.getElementById('nc-name').value||'田中 一郎';
   const plan=document.getElementById('nc-plan').value;
   document.getElementById('newcust-body').innerHTML=
-    '<h3>'+name+'さんを登録しました</h3>'
-    +'<div class="invitebox">契約内容（'+plan+'）を記録し、カルテを作成しました。<br>本人用の招待URLはこちら：'
-    +'<code>coach-base.app/c/x7k2-m9pQ-4rTe</code>'
-    +'このURLをコピーして、普段のLINEで'+name.split(' ')[0]+'さんに送ってください。開くと初回アンケート（経路・目標）が表示され、回答がカルテとレベニューシェア集計に自動反映されます。</div>'
+    '<h3>招待URLを発行しました</h3>'
+    +'<div class="invitebox">プラン「<b>'+plan+'</b>」を設定済みの招待URLです：'
+    +'<code>coach-base.app/invite/x7k2-m9pQ-4rTe</code>'
+    +'コピーして普段のLINEでお客様に送ってください。開くと<b>プランが設定済みの状態</b>で、名前・経路・目標をお客様本人が登録し、カルテが自動作成されます。</div>'
     +'<button class="btn-ok" style="margin-top:12px" onclick="this.textContent=\'コピーしました\'">URLをコピー</button>'
     +'<button class="btn-cancel" onclick="closeNewCust()">閉じる</button>';
 }
