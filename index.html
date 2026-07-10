@@ -822,6 +822,17 @@ function go(id){
 }
 tabs.forEach(t=>t.addEventListener('click',()=>go(t.dataset.scr)));
 
+// URLで入り口を分ける: #trainer=森下さん側のみ / #customer=顧客側のみ / 無指定=全画面
+(function(){
+  const mode=location.hash.replace('#','');
+  if(mode==='trainer'){
+    tabs.forEach(t=>{if(t.classList.contains('customer'))t.style.display='none';});
+  }else if(mode==='customer'){
+    tabs.forEach(t=>{if(!t.classList.contains('customer'))t.style.display='none';});
+    go('scr-mypage');
+  }
+})();
+
 // ---- onboarding survey ----
 function qpick(el){
   el.parentElement.querySelectorAll('.qopt').forEach(o=>o.classList.remove('sel'));
