@@ -488,6 +488,7 @@ svg text{font-family:'Zen Kaku Gothic New'}
           <li><span class="d">10:40</span>山田さん 膝の違和感の報告 → <b style="color:var(--red)">本人対応が必要</b></li>
           <li><span class="d">11:05</span>伊藤さん 目標体重の変更申請（52→50kg）承認待ち</li>
           <li><span class="d">12:00</span>高橋さん 7月分の入金記録がありません → カルテで入金を記録 or 本人に確認</li>
+          <li><span class="d">13:30</span><b style="color:var(--amber)">経由の申告が不一致：</b>西田さん（トレーナー申告：紹介 ／ 本人回答：インスタ）→ シェア判定が保留中。確認して確定してください</li>
         </ul>
       </div>
     </div>
@@ -805,6 +806,13 @@ svg text{font-family:'Zen Kaku Gothic New'}
     </select>
     <label>契約日</label>
     <input type="date" id="nc-date" value="2026-07-10">
+    <label>この方は何経由ですか？（顧客本人の回答と自動照合されます）</label>
+    <select id="nc-route">
+      <option>インスタ</option>
+      <option>紹介</option>
+      <option>Web・検索</option>
+      <option>その他</option>
+    </select>
     <button class="btn-ok" onclick="createCust()">このプランで招待URLを発行</button>
     <button class="btn-cancel" onclick="closeNewCust()">キャンセル</button>
   </div>
@@ -916,7 +924,7 @@ function submitSurvey(){
   d.style.display='block';
   d.innerHTML='<b>'+nm+'</b>さんの登録が完了しました。カルテが自動作成されます。<br>'
     +'プラン：<b>月8回 ¥192,000/月</b>（トレーナー設定済み）<br>'
-    +'経路：<b>'+route+'</b>（レベニューシェア集計にもこの回答が使われます）<br>'
+    +'経路：<b>'+route+'</b>（トレーナー側の申告と自動照合されます）<br>'
     +'目標：<b>'+goal+(w?'・目標体重 '+w+'kg':'')+'</b>'
     +'<button class="mp-reqbtn" style="margin-top:14px" onclick="go(\'scr-mypage\')">マイページへ進む</button>';
   d.scrollIntoView({behavior:'smooth',block:'center'});
@@ -938,11 +946,13 @@ function openNewCust(){document.getElementById('newcustbg').classList.add('on')}
 function closeNewCust(){document.getElementById('newcustbg').classList.remove('on')}
 function createCust(){
   const plan=document.getElementById('nc-plan').value;
+  const route=document.getElementById('nc-route').value;
   document.getElementById('newcust-body').innerHTML=
     '<h3>招待URLを発行しました</h3>'
-    +'<div class="invitebox">プラン「<b>'+plan+'</b>」を設定済みの招待URLです：'
+    +'<div class="invitebox">プラン「<b>'+plan+'</b>」／ 経由（あなたの申告）「<b>'+route+'</b>」を設定済みの招待URLです：'
     +'<code>coach-base.app/invite/x7k2-m9pQ-4rTe</code>'
-    +'コピーして普段のLINEでお客様に送ってください。開くと<b>プランが設定済みの状態</b>で、名前・経路・目標をお客様本人が登録し、カルテが自動作成されます。</div>'
+    +'コピーして普段のLINEでお客様に送ってください。開くと<b>プランが設定済みの状態</b>で、名前・経路・目標をお客様本人が登録し、カルテが自動作成されます。<br><br>'
+    +'経由は<b>お客様本人の回答と自動照合</b>されます。一致すればシェア判定が自動確定、不一致の場合は「要確認」として両者に表示されます。</div>'
     +'<button class="btn-ok" style="margin-top:12px" onclick="this.textContent=\'コピーしました\'">URLをコピー</button>'
     +'<button class="btn-cancel" onclick="closeNewCust()">閉じる</button>';
 }
