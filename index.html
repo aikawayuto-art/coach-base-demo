@@ -107,8 +107,9 @@ tr.click:hover{background:#1f2621}
 .cal td.ok{cursor:pointer}
 .morebtn{background:transparent;border:1px dashed var(--line);color:var(--muted);border-radius:12px;padding:12px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
 .wknav{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.wknav button{border:1px solid var(--line);background:transparent;color:inherit;border-radius:8px;padding:6px 12px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer}
-.wknav span{flex:1;text-align:center;font-weight:900;font-size:13px}
+.wknav button{border:1px solid var(--line);background:transparent;color:inherit;border-radius:8px;padding:10px 14px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.wknav button:disabled{opacity:.3;cursor:default}
+.wknav span{flex:1;text-align:center;font-weight:900;font-size:13px;cursor:pointer}
 #scr-mypage .wknav button{border-color:var(--c-line);background:#fbfaf6}
 
 /* ===== mobile customer cards ===== */
@@ -220,7 +221,7 @@ svg text{font-family:'Zen Kaku Gothic New'}
 /* ===== hotpepper-style calendar (trainer / dark) ===== */
 .cal{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px}
 .cal th{border:1px solid var(--line);padding:7px 2px;color:var(--muted);font-size:10.5px;background:var(--panel2);font-weight:700}
-.cal td{border:1px solid var(--line);padding:0;height:36px;text-align:center;vertical-align:middle;font-weight:700}
+.cal td{border:1px solid var(--line);padding:0;height:42px;text-align:center;vertical-align:middle;font-weight:700}
 .cal .tm{color:var(--muted);font-family:'Bebas Neue';font-size:14px;background:var(--panel2);width:46px;letter-spacing:.04em}
 .cal td.ok{background:#24301f;color:var(--accent);font-size:11px}
 .cal td.wait{background:#3a2f12;color:var(--amber);font-size:10px;line-height:1.3}
@@ -248,7 +249,7 @@ svg text{font-family:'Zen Kaku Gothic New'}
 /* ===== hotpepper-style calendar (customer / light) ===== */
 .calc{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12px}
 .calc th{border:1px solid var(--c-line);padding:7px 1px;font-size:10.5px;color:var(--c-muted);background:#f2f0e8;font-weight:700}
-.calc td{border:1px solid var(--c-line);height:40px;text-align:center;font-weight:900;vertical-align:middle}
+.calc td{border:1px solid var(--c-line);height:46px;text-align:center;font-weight:900;vertical-align:middle}
 .calc .tm{background:#f2f0e8;color:var(--c-muted);font-family:'Bebas Neue';font-size:14px;width:42px;font-weight:400}
 .calc td.o{color:var(--c-accent);cursor:pointer;font-size:16px;transition:.12s}
 .calc td.o:hover{background:#e8f3ee}
@@ -292,9 +293,9 @@ svg text{font-family:'Zen Kaku Gothic New'}
 <nav class="topnav">
   <span class="brand">COACH BASE<small>パーソナルトレーナー顧客管理</small></span>
   <span class="navsp"></span>
-  <button class="tab on" data-scr="scr-dash">トレーナー：ダッシュボード</button>
-  <button class="tab" data-scr="scr-yoyaku">トレーナー：予約管理<span class="badge">2</span></button>
-  <button class="tab" data-scr="scr-karte">トレーナー：顧客カルテ</button>
+  <button class="tab on" data-scr="scr-dash">ダッシュボード</button>
+  <button class="tab" data-scr="scr-yoyaku">予約管理<span class="badge">2</span></button>
+  <button class="tab" data-scr="scr-karte">顧客カルテ</button>
   <button class="tab customer" data-scr="scr-mypage">顧客：マイページ</button>
   <button class="tab customer" data-scr="scr-onboard">顧客：初回アンケート</button>
 </nav>
@@ -536,7 +537,7 @@ svg text{font-family:'Zen Kaku Gothic New'}
     <div class="panelbox">
       <div class="panelhead"><h2>週間カレンダー</h2><span class="hint">今週：確定6件・承認待ち2件</span></div>
       <div class="padbox">
-        <div class="wknav"><button onclick="wkShift(-1)">‹ 前週</button><span id="wklabel-t"></span><button onclick="wkShift(1)">次週 ›</button></div>
+        <div class="wknav"><button class="wkprev" onclick="wkShift(-1)">‹ 前週</button><span id="wklabel-t" onclick="wkToday()" title="タップで今週に戻る"></span><button class="wknext" onclick="wkShift(1)">次週 ›</button></div>
         <div class="callegend">
           <span><i style="background:#24301f;border:1px solid var(--accent-dim)"></i>確定</span>
           <span><i style="background:#3a2f12;border:1px solid #8a6c2c"></i>承認待ち</span>
@@ -726,7 +727,7 @@ svg text{font-family:'Zen Kaku Gothic New'}
     <h2>予約を取る</h2>
     <div class="mp-remain"><span class="v">3</span><span class="t">今月の残りセッション（8回中5回消化）</span></div>
     <p class="mp-note" style="margin:0 0 10px">○の枠をタップして申請できます。</p>
-    <div class="wknav"><button onclick="wkShift(-1)">‹ 前週</button><span id="wklabel-c"></span><button onclick="wkShift(1)">次週 ›</button></div>
+    <div class="wknav"><button class="wkprev" onclick="wkShift(-1)">‹ 前週</button><span id="wklabel-c" onclick="wkToday()" title="タップで今週に戻る"></span><button class="wknext" onclick="wkShift(1)">次週 ›</button></div>
     <table class="calc" id="ccal"></table>
     <div class="calc-legend">
       <span style="color:var(--c-accent)">○ 予約できます</span>
@@ -855,16 +856,17 @@ function approve(id,msg){
 }
 
 // ---- booking calendar data ----
-const WEEKS=[
-  {label:'7/12（土）- 7/18（金）',days:[
-    {d:'7/12',w:'土'},{d:'7/13',w:'日',closed:true},{d:'7/14',w:'月'},
-    {d:'7/15',w:'火'},{d:'7/16',w:'水'},{d:'7/17',w:'木'},{d:'7/18',w:'金'}
-  ]},
-  {label:'7/19（土）- 7/25（金）',days:[
-    {d:'7/19',w:'土'},{d:'7/20',w:'日',closed:true},{d:'7/21',w:'月'},
-    {d:'7/22',w:'火'},{d:'7/23',w:'水'},{d:'7/24',w:'木'},{d:'7/25',w:'金'}
-  ]}
-];
+// 8週間先まで自動生成（本実装では無制限に先の週を表示できます）
+const WD=['日','月','火','水','木','金','土'];
+const WEEKS=[];
+for(let w=0;w<8;w++){
+  const days=[];
+  for(let i=0;i<7;i++){
+    const dt=new Date(2026,6,12+w*7+i); // デモ基準日: 2026/7/12（土）
+    days.push({d:(dt.getMonth()+1)+'/'+dt.getDate(),w:WD[dt.getDay()],closed:dt.getDay()===0});
+  }
+  WEEKS.push({label:days[0].d+'（'+days[0].w+'）- '+days[6].d+'（'+days[6].w+'）',days:days});
+}
 let wk=0;
 const TIMES=['10:00','11:00','13:00','14:00','16:00','18:00','19:00','20:00'];
 const BOOK={
@@ -966,10 +968,16 @@ function renderCustomerCal(){
 }
 function wkShift(n){
   wk=Math.max(0,Math.min(WEEKS.length-1,wk+n));
-  renderTrainerCal();renderCustomerCal();
+  renderTrainerCal();renderCustomerCal();updateNav();
+}
+function wkToday(){wk=0;renderTrainerCal();renderCustomerCal();updateNav();}
+function updateNav(){
+  document.querySelectorAll('.wkprev').forEach(b=>b.disabled=(wk===0));
+  document.querySelectorAll('.wknext').forEach(b=>b.disabled=(wk===WEEKS.length-1));
 }
 renderTrainerCal();
 renderCustomerCal();
+updateNav();
 
 // ---- customer list search & filter ----
 let cfilter='all';
@@ -1027,6 +1035,7 @@ function pick(el){
   const b=document.getElementById('reqbtn');
   b.disabled=false;
   b.textContent=selSlot+' で予約を申請する';
+  b.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function requestSlot(){
   if(!selSlot)return;
@@ -1035,6 +1044,7 @@ function requestSlot(){
   const p=document.getElementById('pending');
   p.style.display='block';
   p.innerHTML='<b>'+selSlot+'</b> で申請しました。<br>森下トレーナーの承認後に確定します（承認待ち）。確定するとLINEに通知が届きます。';
+  p.scrollIntoView({behavior:'smooth',block:'center'});
   const b=document.getElementById('reqbtn');
   b.disabled=true;
   b.textContent='申請済み（承認待ち）';
