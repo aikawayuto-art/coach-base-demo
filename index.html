@@ -102,6 +102,9 @@ tr.click:hover{background:#1f2621}
 .fchips{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .fchip{font-size:11.5px;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:5px 12px;cursor:pointer;transition:.15s}
 .fchip.on{background:var(--accent);color:#101210;border-color:var(--accent)}
+.sortsel{margin-top:8px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 12px;color:var(--text);font-family:inherit;font-size:12px;width:100%}
+.badge{background:var(--amber);color:#101210;border-radius:99px;font-size:10px;padding:1px 6px;font-weight:900;margin-left:4px}
+.cal td.ok{cursor:pointer}
 .morebtn{background:transparent;border:1px dashed var(--line);color:var(--muted);border-radius:12px;padding:12px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
 .wknav{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .wknav button{border:1px solid var(--line);background:transparent;color:inherit;border-radius:8px;padding:6px 12px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer}
@@ -290,7 +293,7 @@ svg text{font-family:'Zen Kaku Gothic New'}
   <span class="brand">COACH BASE<small>パーソナルトレーナー顧客管理</small></span>
   <span class="navsp"></span>
   <button class="tab on" data-scr="scr-dash">トレーナー：ダッシュボード</button>
-  <button class="tab" data-scr="scr-yoyaku">トレーナー：予約管理</button>
+  <button class="tab" data-scr="scr-yoyaku">トレーナー：予約管理<span class="badge">2</span></button>
   <button class="tab" data-scr="scr-karte">トレーナー：顧客カルテ</button>
   <button class="tab customer" data-scr="scr-mypage">顧客：マイページ</button>
   <button class="tab customer" data-scr="scr-onboard">顧客：初回アンケート</button>
@@ -351,38 +354,44 @@ svg text{font-family:'Zen Kaku Gothic New'}
         <span class="fchip" data-f="紹介" onclick="fpick(this)">紹介</span>
         <span class="fchip" data-f="Web" onclick="fpick(this)">Web</span>
       </div>
+      <select class="sortsel" id="csort" onchange="sortCustomers()">
+        <option value="care">並び替え：要ケア順</option>
+        <option value="sales">並び替え：累計売上が大きい順</option>
+        <option value="start">並び替え：契約が新しい順</option>
+      </select>
     </div>
     <div class="clist" id="custlist">
-      <div class="ccard">
+      <div class="ccard" data-care="0" data-sales="480000" data-start="202603">
         <div class="cc-top"><span class="avatar">佐</span><span class="cc-name">佐藤 健一</span><span class="route r-insta">インスタ</span><span class="status s-bad cc-right"><span class="dot"></span>離脱予兆</span></div>
         <div class="cc-mid">2026/3契約（5ヶ月目）・月8回・残 6/8回・目標まで 6.2kg</div>
         <div class="cc-bot"><span style="color:var(--red);font-weight:700">最終やり取り 5日前</span><span class="num cc-money">¥480,000</span></div>
       </div>
-      <div class="ccard">
+      <div class="ccard" data-care="0" data-sales="168000" data-start="202605">
         <div class="cc-top"><span class="avatar">高</span><span class="cc-name">高橋 美咲</span><span class="route r-web">Web</span><span class="status s-bad cc-right"><span class="dot"></span>離脱予兆</span></div>
         <div class="cc-mid">2026/5契約（3ヶ月目）・月4回・残 2/4回・目標まで 3.8kg</div>
         <div class="cc-bot"><span style="color:var(--red);font-weight:700">最終やり取り 3日前</span><span class="num cc-money">¥168,000</span></div>
       </div>
-      <div class="ccard">
+      <div class="ccard" data-care="1" data-sales="392000" data-start="202512">
         <div class="cc-top"><span class="avatar">鈴</span><span class="cc-name">鈴木 大輔</span><span class="route r-ref">紹介</span><span class="status s-warn cc-right"><span class="dot"></span>要注意</span></div>
         <div class="cc-mid">2025/12契約（8ヶ月目）・月4回・残 2/4回・目標まで 8.5kg</div>
         <div class="cc-bot"><span>最終やり取り 昨日</span><span class="num cc-money">¥392,000</span></div>
       </div>
-      <div class="ccard" onclick="go('scr-karte')">
+      <div class="ccard" onclick="go('scr-karte')" data-care="2" data-sales="576000" data-start="202602">
         <div class="cc-top"><span class="avatar">山</span><span class="cc-name">山田 太郎</span><span class="route r-insta">インスタ</span><span class="status s-good cc-right"><span class="dot"></span>好調</span></div>
         <div class="cc-mid">2026/2契約（6ヶ月目）・月8回・残 3/8回・目標まで 4.4kg</div>
         <div class="cc-bot"><span>最終やり取り 今日</span><span class="num cc-money">¥576,000</span></div>
       </div>
-      <div class="ccard">
+      <div class="ccard" data-care="2" data-sales="528000" data-start="202509">
         <div class="cc-top"><span class="avatar">伊</span><span class="cc-name">伊藤 さくら</span><span class="route r-insta">インスタ</span><span class="status s-good cc-right"><span class="dot"></span>好調</span></div>
         <div class="cc-mid">2025/9契約（11ヶ月目）・月4回・残 1/4回・目標まで 1.2kg</div>
         <div class="cc-bot"><span>最終やり取り 今日</span><span class="num cc-money">¥528,000</span></div>
       </div>
-      <div class="ccard">
+      <div class="ccard" data-care="2" data-sales="864000" data-start="202511">
         <div class="cc-top"><span class="avatar">渡</span><span class="cc-name">渡辺 翔</span><span class="route r-ref">紹介</span><span class="status s-good cc-right"><span class="dot"></span>好調</span></div>
         <div class="cc-mid">2025/11契約（9ヶ月目）・月8回・残 4/8回・増量 +2.1kg</div>
         <div class="cc-bot"><span>最終やり取り 今日</span><span class="num cc-money">¥864,000</span></div>
       </div>
+      <div class="mini" id="noresult" style="display:none;text-align:center;padding:14px">該当する顧客がいません。検索条件を変えてみてください</div>
       <button class="morebtn" onclick="this.textContent='デモ版のため6名のみ収録しています';this.disabled=true">残り8名を表示</button>
     </div>
   </div>
@@ -458,6 +467,7 @@ svg text{font-family:'Zen Kaku Gothic New'}
           <li><span class="d">09:12</span>佐藤さんが5日間未報告 → 声かけの連絡を推奨</li>
           <li><span class="d">10:40</span>山田さん 膝の違和感の報告 → <b style="color:var(--red)">本人対応が必要</b></li>
           <li><span class="d">11:05</span>伊藤さん 目標体重の変更申請（52→50kg）承認待ち</li>
+          <li><span class="d">12:00</span>高橋さん 7月分の入金記録がありません → カルテで入金を記録 or 本人に確認</li>
         </ul>
       </div>
     </div>
@@ -535,7 +545,7 @@ svg text{font-family:'Zen Kaku Gothic New'}
           <span><i style="background:#141816;border:1px solid var(--line)"></i>定休日</span>
         </div>
         <table class="cal" id="tcal"></table>
-        <p class="srcnote">営業時間内はすべて<b>デフォルトで空き枠</b>。空きマスをタップすると「<b>顧客の予約を入れる</b>（対面や電話で決まった分）／<b>自分の予定でブロック</b>」を選べます。ブロックはもう一度タップで解除。どちらも顧客側では即座に「×」になり、マイページには<b>空き枠だけ</b>が「○」表示されます（名前は一切見えません）</p>
+        <p class="srcnote">営業時間内はすべて<b>デフォルトで空き枠</b>。空きマスをタップ →「<b>顧客の予約を入れる</b>／<b>自分の予定でブロック</b>／<b>終日休み</b>」を選択。<b>確定済みマス（緑）をタップすると取り消し</b>できます。ブロックはもう一度タップで解除。変更は顧客側の○×に即反映され、マイページに名前は一切見えません</p>
         <div style="display:flex;gap:24px;flex-wrap:wrap;margin-top:16px;border-top:1px dashed var(--line);padding-top:14px">
           <div><div class="mini">今日のセッション</div><div class="num" style="font-size:28px">1<span style="font-size:13px;color:var(--muted)">件</span></div></div>
           <div><div class="mini">今週の稼働</div><div class="num" style="font-size:28px">8<span style="font-size:13px;color:var(--muted)">/48枠</span></div><div class="mini">確定6＋承認待ち2 ÷ 8枠×6営業日</div></div>
@@ -707,6 +717,9 @@ svg text{font-family:'Zen Kaku Gothic New'}
       <div class="datebox"><div class="m">JUL</div><div class="d">12</div></div>
       <div class="info"><b>7月12日（土）10:00 - 11:00</b><br>下半身＋膝チェック ／ 確定済み</div>
     </div>
+    <button class="mp-reqbtn" style="background:#fff;color:var(--c-accent);border:1.5px solid var(--c-accent)" id="cxlbtn" onclick="reqCancel()">変更・キャンセルを申請</button>
+    <div class="mp-pending" id="cxl-pending"></div>
+    <p class="mp-note">前日20時までは無料で変更・キャンセルできます。当日キャンセルは1回分の消化となります。</p>
   </div>
 
   <div class="mp-card">
@@ -737,7 +750,18 @@ svg text{font-family:'Zen Kaku Gothic New'}
     </select>
     <button class="btn-ok" onclick="sheetBook()">この顧客で予約を確定</button>
     <button class="btn-blk" onclick="sheetBlock()">自分の予定でブロック</button>
+    <button class="btn-blk" onclick="sheetBlockDay()">この日を終日休みにする</button>
     <button class="btn-cancel" onclick="closeSheet()">キャンセル</button>
+  </div>
+</div>
+
+<!-- ===== booking cancel sheet (trainer) ===== -->
+<div class="sheetbg" id="cancelbg" onclick="if(event.target===this)closeCancel()">
+  <div class="sheet">
+    <div class="when" id="cancel-when"></div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:14px" id="cancel-who"></div>
+    <button class="btn-ok" style="background:var(--red);color:#1b0f0d" onclick="doCancel()">この予約を取り消す（枠は空きに戻ります）</button>
+    <button class="btn-cancel" onclick="closeCancel()">閉じる</button>
   </div>
 </div>
 
@@ -821,7 +845,7 @@ function addContract(){
   const dv=document.getElementById('cf-date').value;
   const d=dv?parseInt(dv.split('-')[1])+'/'+parseInt(dv.split('-')[2]):'';
   const li=document.createElement('li');
-  li.innerHTML='<span class="d">'+d+'</span>'+type+'（'+plan+'）<span class="pr">追加済み</span>';
+  li.innerHTML='<span class="d">'+d+'</span>'+type+'（'+plan+'）<span class="pr">追加済み</span> <a onclick="this.parentElement.remove()" style="color:var(--red);cursor:pointer;font-size:11px;font-weight:700">取消</a>';
   document.getElementById('contract-log').prepend(li);
 }
 
@@ -878,6 +902,25 @@ function sheetBlock(){
   BLOCKED.add(slotKey);
   closeSheet();renderTrainerCal();renderCustomerCal();
 }
+// 終日ブロック（予約が入っていない枠のみまとめて休みに）
+function sheetBlockDay(){
+  const day=slotKey.split(' ')[0];
+  TIMES.forEach(t=>{const k=day+' '+t;if(!BOOK[k])BLOCKED.add(k);});
+  closeSheet();renderTrainerCal();renderCustomerCal();
+}
+// 確定予約の取り消し
+let cancelKey=null;
+function openCancel(key,label,name){
+  cancelKey=key;
+  document.getElementById('cancel-when').textContent=label;
+  document.getElementById('cancel-who').textContent=name+'さんの確定済み予約です。取り消すと本人への連絡が必要です。';
+  document.getElementById('cancelbg').classList.add('on');
+}
+function closeCancel(){document.getElementById('cancelbg').classList.remove('on')}
+function doCancel(){
+  delete BOOK[cancelKey];
+  closeCancel();renderTrainerCal();renderCustomerCal();
+}
 
 function calHead(days){
   return '<tr><th></th>'+days.map(d=>`<th class="${d.w==='土'?'sat':d.w==='日'?'sun':''}">${d.d}<br>${d.w}</th>`).join('')+'</tr>';
@@ -890,7 +933,7 @@ function renderTrainerCal(){
     days.forEach(d=>{
       if(d.closed){h+='<td class="closed">休</td>';return;}
       const key=d.d+' '+t, b=BOOK[key];
-      if(b){h+=b.st==='ok'?`<td class="ok">${b.n}</td>`:`<td class="wait">${b.n}<br>申請</td>`;}
+      if(b){h+=b.st==='ok'?`<td class="ok" onclick="openCancel('${key}','${d.d}（${d.w}）${t}','${b.n}')">${b.n}</td>`:`<td class="wait">${b.n}<br>申請</td>`;}
       else if(BLOCKED.has(key))h+=`<td class="blocked" onclick="toggleBlock('${key}')">予定</td>`;
       else h+=`<td class="free" onclick="openSlot('${key}','${d.d}（${d.w}）${t}')"></td>`;
     });
@@ -938,6 +981,7 @@ function fpick(el){
 }
 function filterCustomers(){
   const q=document.getElementById('csearch').value.trim();
+  let visible=0;
   document.querySelectorAll('#custlist .ccard').forEach(c=>{
     const nameEl=c.querySelector('.cc-name');
     if(!nameEl){return;}
@@ -949,7 +993,29 @@ function filterCustomers(){
     if(cfilter==='care' && !(status.includes('離脱')||status.includes('注意')))show=false;
     if(['インスタ','紹介','Web'].includes(cfilter) && route!==cfilter)show=false;
     c.style.display=show?'':'none';
+    if(show)visible++;
   });
+  document.getElementById('noresult').style.display=visible?'none':'block';
+}
+function sortCustomers(){
+  const key=document.getElementById('csort').value;
+  const list=document.getElementById('custlist');
+  const btn=list.querySelector('.morebtn');
+  const cards=[...list.querySelectorAll('.ccard')];
+  cards.sort((a,b)=>{
+    if(key==='care')return (+a.dataset.care)-(+b.dataset.care);
+    if(key==='sales')return (+b.dataset.sales)-(+a.dataset.sales);
+    return (+b.dataset.start)-(+a.dataset.start);
+  });
+  cards.forEach(c=>list.insertBefore(c,btn));
+}
+// 顧客側：確定予約の変更・キャンセル申請
+function reqCancel(){
+  const p=document.getElementById('cxl-pending');
+  p.style.display='block';
+  p.innerHTML='<b>7/12（土）10:00</b> の変更・キャンセル申請を送りました。森下トレーナーの確認後に確定します。';
+  const b=document.getElementById('cxlbtn');
+  b.disabled=true;b.textContent='申請済み（確認待ち）';b.style.opacity=.5;
 }
 
 // ---- booking: customer request ----
