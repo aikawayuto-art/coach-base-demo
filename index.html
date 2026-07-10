@@ -128,6 +128,9 @@ svg text{font-family:'Zen Kaku Gothic New'}
 .srcnote b{color:var(--accent-dim)}
 .backlink{display:inline-block;margin-bottom:14px;color:var(--muted);font-size:13px;cursor:pointer;font-weight:700}
 .backlink:hover{color:var(--accent)}
+.cform{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.cform select,.cform input{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--text);font-family:inherit;font-size:13px;width:100%}
+.cform button{grid-column:1/-1;background:var(--accent);border:0;color:#101210;font-weight:700;border-radius:10px;padding:11px;cursor:pointer;font-family:inherit;font-size:13px}
 .inputrow{display:flex;gap:8px;margin-top:12px}
 .inputrow input{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;color:var(--text);font-family:inherit;font-size:13px}
 .inputrow button{background:var(--accent);border:0;color:#101210;font-weight:700;border-radius:10px;padding:10px 18px;cursor:pointer;font-family:inherit;font-size:13px}
@@ -559,12 +562,18 @@ svg text{font-family:'Zen Kaku Gothic New'}
             <div><div class="mini">累計売上</div><div class="num" style="font-size:30px;color:var(--accent)">¥576,000</div><div class="mini">月8回 ¥96,000 × 6ヶ月</div></div>
             <div><div class="mini">今月の消化</div><div class="num" style="font-size:30px">5<span style="font-size:14px;color:var(--muted)">/8回</span></div><div class="mini">残3回 ／ 予約1件 承認待ち</div></div>
           </div>
-          <ul class="loglist">
+          <ul class="loglist" id="contract-log">
             <li><span class="d">7/01</span>7月分入金 ¥96,000</li>
             <li><span class="d">5/01</span>継続更新（3ヶ月・月8回 ¥96,000）</li>
             <li><span class="d">2/01</span>入会契約 月8回プラン ¥96,000/月 <span class="pr">インスタ経由</span></li>
           </ul>
-          <div class="inputrow"><input placeholder="契約・入金を記録（例：8月分入金 ¥96,000）…"><button>追加</button></div>
+          <div class="cform">
+            <select id="cf-type"><option>入金</option><option>新規契約</option><option>継続更新</option><option>プラン変更</option><option>解約</option></select>
+            <input type="date" id="cf-date" value="2026-07-10">
+            <select id="cf-plan"><option>月8回 ¥96,000</option><option>月4回 ¥56,000</option><option>月4回 ¥48,000</option></select>
+            <button onclick="addContract()">記録する</button>
+          </div>
+          <p class="srcnote">ここに記録した契約・入金から、累計売上・在籍月数・レベニューシェア・ダッシュボードの月次売上が<b>すべて自動計算</b>されます</p>
         </div>
       </div>
 
@@ -754,6 +763,17 @@ function submitSurvey(){
     +'経路：<b>'+route+'</b>（レベニューシェア集計にもこの回答が使われます）<br>'
     +'目標：<b>'+goal+(w?'・目標体重 '+w+'kg':'')+'</b>';
   d.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+// ---- contract log ----
+function addContract(){
+  const type=document.getElementById('cf-type').value;
+  const plan=document.getElementById('cf-plan').value;
+  const dv=document.getElementById('cf-date').value;
+  const d=dv?parseInt(dv.split('-')[1])+'/'+parseInt(dv.split('-')[2]):'';
+  const li=document.createElement('li');
+  li.innerHTML='<span class="d">'+d+'</span>'+type+'（'+plan+'）<span class="pr">追加済み</span>';
+  document.getElementById('contract-log').prepend(li);
 }
 
 // ---- booking: trainer approve ----
