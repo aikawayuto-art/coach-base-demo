@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COACH BASE — モックアップ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0f1210;
+  --panel:#181d1a;
+  --panel2:#1f2521;
+  --line:#2c342e;
+  --text:#e8ece8;
+  --muted:#8a948c;
+  --accent:#d4f53c;
+  --accent-dim:#a7c22f;
+  --red:#ff6b5e;
+  --amber:#ffc857;
+  --good:#5fd68a;
+  /* light theme (customer) */
+  --c-bg:#f6f4ee;
+  --c-panel:#ffffff;
+  --c-ink:#16211b;
+  --c-muted:#7a8279;
+  --c-accent:#0e6b45;
+  --c-line:#e5e1d6;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Zen Kaku Gothic New',sans-serif;background:var(--ink);color:var(--text);-webkit-font-smoothing:antialiased}
+.num{font-family:'Bebas Neue',sans-serif;letter-spacing:.02em}
+
+/* ===== global bar ===== */
+.mockbar{background:var(--accent);color:#101210;font-size:12px;font-weight:700;text-align:center;padding:6px 12px;letter-spacing:.08em}
+.topnav{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(15,18,16,.94);backdrop-filter:blur(8px);z-index:50;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.topnav::-webkit-scrollbar{display:none}
+.brand{font-family:'Bebas Neue';font-size:22px;letter-spacing:.06em;color:var(--accent);margin-right:6px;flex:0 0 auto}
+.brand small{display:none}
+.navsp{flex:0}
+.tab{border:1px solid var(--line);background:transparent;color:var(--muted);padding:8px 14px;border-radius:99px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:.18s;flex:0 0 auto;white-space:nowrap}
+.tab:hover{color:var(--text);border-color:var(--muted)}
+.tab.on{background:var(--accent);color:#101210;border-color:var(--accent)}
+.tab.customer.on{background:var(--c-accent);color:#fff;border-color:var(--c-accent)}
+
+.screen{display:none;animation:fadein .35s ease}
+.screen.on{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.wrap{max-width:480px;margin:0 auto;padding:20px 14px 80px}
+
+/* ===== dashboard ===== */
+.pagehead{display:flex;align-items:baseline;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.pagehead h1{font-size:22px;font-weight:900}
+.pagehead .date{color:var(--muted);font-size:13px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 14px 12px;position:relative;overflow:hidden}
+.kpi.hero{background:linear-gradient(135deg,#232b1e,#181d1a);border-color:#3a4630}
+.kpi .label{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.06em;margin-bottom:6px}
+.kpi .val{font-size:27px;line-height:1;color:var(--text)}
+.kpi .val em{font-style:normal;color:var(--accent)}
+.kpi .val .unit{font-size:18px;color:var(--muted);margin-left:2px}
+.kpi .delta{font-size:12px;margin-top:6px;font-weight:700}
+.up{color:var(--good)} .down{color:var(--red)}
+.kpi .formula{font-size:10.5px;color:#6b756d;margin-top:8px;border-top:1px dashed var(--line);padding-top:7px;line-height:1.5}
+.alertstrip{display:flex;gap:10px;align-items:center;background:#2a1c19;border:1px solid #4a2c26;border-radius:12px;padding:12px 14px;margin-bottom:18px;font-size:12.5px;flex-wrap:wrap;line-height:1.6}
+.alertstrip b{color:var(--red)}
+.alertstrip .pill{margin-left:auto;background:var(--red);color:#1b0f0d;font-weight:700;font-size:12px;padding:5px 14px;border-radius:99px;cursor:pointer}
+
+.panelbox{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:20px}
+.panelhead{display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.panelhead h2{font-size:15px;font-weight:900}
+.panelhead .hint{margin-left:auto;font-size:12px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-size:11px;color:var(--muted);text-align:left;font-weight:700;letter-spacing:.05em;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:13px 14px;border-bottom:1px solid #232a25;white-space:nowrap}
+tr.click{cursor:pointer;transition:.15s}
+tr.click:hover{background:#1f2621}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--panel2);border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent);margin-right:9px;vertical-align:middle}
+.status{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:12px}
+.dot{width:8px;height:8px;border-radius:50%}
+.s-good .dot{background:var(--good)} .s-good{color:var(--good)}
+.s-warn .dot{background:var(--amber)} .s-warn{color:var(--amber)}
+.s-bad .dot{background:var(--red)} .s-bad{color:var(--red)}
+.bar{height:6px;border-radius:99px;background:#2a322c;width:110px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--accent)}
+.mini{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* ===== karte ===== */
+.kartehead{display:flex;flex-direction:column;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+.bigavatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#33402a,#1d231e);border:1px solid #3a4630;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;color:var(--accent)}
+.kartehead h1{font-size:21px;font-weight:900}
+.kartehead .sub{color:var(--muted);font-size:12.5px;margin-top:3px}
+.goalchips{width:100%;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.chip{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center}
+.chip .t{font-size:10.5px;color:var(--muted);font-weight:700}
+.chip .v{font-size:24px;font-family:'Bebas Neue';color:var(--text)}
+.chip .v em{font-style:normal;color:var(--accent)}
+.grid2{display:grid;grid-template-columns:1fr;gap:14px}
+
+/* ===== mobile customer cards ===== */
+.clist{display:grid;gap:10px;padding:12px}
+.ccard{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;transition:.15s}
+.ccard:active{background:#242c26}
+.cc-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cc-name{font-size:14px;font-weight:900}
+.cc-right{margin-left:auto}
+.cc-mid{font-size:11.5px;color:var(--muted);margin:7px 0 8px;line-height:1.6}
+.cc-bot{display:flex;gap:14px;font-size:12px;align-items:baseline;flex-wrap:wrap}
+.cc-money{margin-left:auto;font-size:16px}
+.padbox{padding:18px 20px}
+.legend{display:flex;gap:16px;font-size:11px;color:var(--muted);margin-bottom:10px}
+.legend i{display:inline-block;width:16px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
+svg text{font-family:'Zen Kaku Gothic New'}
+.loglist{list-style:none}
+.loglist li{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid #232a25;font-size:13px;align-items:baseline}
+.loglist li:last-child{border-bottom:0}
+.loglist .d{color:var(--muted);font-size:11.5px;min-width:44px}
+.loglist .pr{margin-left:auto;font-size:10.5px;font-weight:700;color:#101210;background:var(--accent);border-radius:99px;padding:2px 9px}
+.aisum{font-size:13px;line-height:1.9;color:#c9d0ca}
+.aisum .tag{display:inline-block;font-size:10.5px;font-weight:700;color:var(--accent);border:1px solid var(--accent-dim);border-radius:99px;padding:1px 9px;margin-right:6px}
+.timeline{list-style:none}
+.timeline li{position:relative;padding:0 0 16px 22px;font-size:13px;line-height:1.7}
+.timeline li:before{content:"";position:absolute;left:5px;top:7px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.timeline li:after{content:"";position:absolute;left:8px;top:18px;bottom:-2px;width:1px;background:var(--line)}
+.timeline li:last-child:after{display:none}
+.timeline .d{color:var(--muted);font-size:11px;display:block}
+.srcnote{font-size:10.5px;color:#6b756d;margin-top:10px}
+.srcnote b{color:var(--accent-dim)}
+.backlink{display:inline-block;margin-bottom:14px;color:var(--muted);font-size:13px;cursor:pointer;font-weight:700}
+.backlink:hover{color:var(--accent)}
+.inputrow{display:flex;gap:8px;margin-top:12px}
+.inputrow input{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;color:var(--text);font-family:inherit;font-size:13px}
+.inputrow button{background:var(--accent);border:0;color:#101210;font-weight:700;border-radius:10px;padding:10px 18px;cursor:pointer;font-family:inherit;font-size:13px}
+
+/* ===== customer mypage (light) ===== */
+#scr-mypage{background:var(--c-bg);color:var(--c-ink);min-height:100vh}
+.phone{max-width:430px;margin:0 auto;padding:26px 20px 90px}
+.mp-head{margin-bottom:20px}
+.mp-head .hello{font-size:12.5px;color:var(--c-muted);font-weight:700;letter-spacing:.05em}
+.mp-head h1{font-size:24px;font-weight:900;margin-top:2px}
+.mp-hero{background:linear-gradient(150deg,#0e6b45,#0a4a30);color:#fff;border-radius:22px;padding:24px;margin-bottom:14px;position:relative;overflow:hidden}
+.mp-hero:before{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.07)}
+.mp-hero .t{font-size:12px;font-weight:700;opacity:.85;letter-spacing:.08em}
+.mp-hero .big{font-family:'Bebas Neue';font-size:64px;line-height:1;margin:6px 0 2px}
+.mp-hero .big small{font-size:26px}
+.mp-hero .sub{font-size:12.5px;opacity:.9}
+.mp-progress{height:10px;background:rgba(255,255,255,.18);border-radius:99px;margin-top:16px;overflow:hidden}
+.mp-progress i{display:block;height:100%;width:56%;background:#d4f53c;border-radius:99px}
+.mp-progress-label{display:flex;justify-content:space-between;font-size:11px;margin-top:6px;opacity:.85}
+.mp-card{background:var(--c-panel);border:1px solid var(--c-line);border-radius:18px;padding:18px 18px;margin-bottom:14px}
+.mp-card h2{font-size:14px;font-weight:900;margin-bottom:12px}
+.mp-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center}
+.mp-stat{background:#f2f0e8;border-radius:12px;padding:12px 6px}
+.mp-stat .v{font-family:'Bebas Neue';font-size:26px;color:var(--c-accent)}
+.mp-stat .t{font-size:10.5px;color:var(--c-muted);font-weight:700}
+.mp-advice{font-size:13px;line-height:1.9;color:#3c463f}
+.mp-advice b{color:var(--c-accent)}
+.mp-from{font-size:11px;color:var(--c-muted);margin-top:8px;text-align:right}
+.mp-input{display:flex;gap:8px}
+.mp-input input{flex:1;border:1px solid var(--c-line);border-radius:12px;padding:12px 14px;font-family:inherit;font-size:15px;background:#fbfaf6}
+.mp-input button{background:var(--c-accent);color:#fff;border:0;border-radius:12px;padding:12px 20px;font-weight:700;font-family:inherit;font-size:13px;cursor:pointer}
+.mp-note{font-size:11px;color:var(--c-muted);margin-top:8px;line-height:1.6}
+.mp-session{display:flex;align-items:center;gap:14px}
+.mp-session .datebox{background:var(--c-accent);color:#fff;border-radius:14px;padding:10px 14px;text-align:center;min-width:64px}
+.mp-session .datebox .m{font-size:10px;font-weight:700;opacity:.85}
+.mp-session .datebox .d{font-family:'Bebas Neue';font-size:30px;line-height:1}
+.mp-session .info{font-size:13px;line-height:1.7}
+.mp-session .info b{font-size:14px}
+.mp-best li{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--c-line);font-size:13px;list-style:none}
+.mp-best li:last-child{border:0}
+.mp-best .v{font-weight:900;color:var(--c-accent)}
+.saved{display:none;font-size:12px;color:var(--c-accent);font-weight:700;margin-top:8px}
+
+/* ===== route badges ===== */
+.route{display:inline-block;font-size:10.5px;font-weight:700;border-radius:99px;padding:2px 10px;border:1px solid;vertical-align:middle}
+.r-insta{color:#ff7ab8;border-color:#8a4463;background:rgba(255,122,184,.08)}
+.r-ref{color:#7fc4ff;border-color:#3d6280;background:rgba(127,196,255,.08)}
+.r-web{color:#b9c2ba;border-color:var(--line);background:rgba(255,255,255,.03)}
+
+/* ===== booking (trainer) ===== */
+.reqcard{background:#232b1e;border:1px solid #3a4630;border-radius:14px;padding:16px 18px;margin-bottom:12px}
+.reqcard .who{font-weight:900;font-size:15px}
+.reqcard .when{font-family:'Bebas Neue';font-size:24px;color:var(--accent);margin:4px 0 8px;letter-spacing:.03em}
+.reqmeta{font-size:12px;color:#aeb8b0;line-height:1.9}
+.reqmeta b{color:var(--text)}
+.reqbtns{display:flex;gap:8px;margin-top:12px}
+.btn-ok{background:var(--accent);border:0;color:#101210;font-weight:700;border-radius:10px;padding:9px 18px;cursor:pointer;font-family:inherit;font-size:13px}
+.btn-alt{background:transparent;border:1px solid var(--line);color:var(--muted);font-weight:700;border-radius:10px;padding:9px 18px;cursor:pointer;font-family:inherit;font-size:13px}
+.btn-alt:hover{color:var(--text)}
+.confirmed-msg{color:var(--good);font-weight:700;font-size:13px}
+.sched{list-style:none}
+.sched .day{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em;padding:12px 0 6px;border-bottom:1px solid #232a25}
+.sched .slot-row{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #232a25;align-items:flex-start}
+.sched .time{font-family:'Bebas Neue';font-size:19px;color:var(--text);min-width:52px;letter-spacing:.04em}
+.sched .detail{font-size:12.5px;line-height:1.7;flex:1}
+.sched .detail .nm{font-weight:900;font-size:13.5px}
+.sched .detail .prev{color:var(--muted);font-size:11.5px}
+.sched .detail .prev b{color:#aeb8b0}
+.remain{font-size:10.5px;font-weight:700;color:var(--accent);border:1px solid var(--accent-dim);border-radius:99px;padding:1px 9px;white-space:nowrap}
+.remain.low{color:var(--amber);border-color:#8a6c2c}
+.tag-wait{font-size:10.5px;font-weight:700;color:#101210;background:var(--amber);border-radius:99px;padding:1px 9px;white-space:nowrap}
+
+/* ===== hotpepper-style calendar (trainer / dark) ===== */
+.cal{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px}
+.cal th{border:1px solid var(--line);padding:7px 2px;color:var(--muted);font-size:10.5px;background:var(--panel2);font-weight:700}
+.cal td{border:1px solid var(--line);padding:0;height:36px;text-align:center;vertical-align:middle;font-weight:700}
+.cal .tm{color:var(--muted);font-family:'Bebas Neue';font-size:14px;background:var(--panel2);width:46px;letter-spacing:.04em}
+.cal td.ok{background:#24301f;color:var(--accent);font-size:11px}
+.cal td.wait{background:#3a2f12;color:var(--amber);font-size:10px;line-height:1.3}
+.cal td.closed{background:#141816;color:#3d453f;font-size:10px}
+.cal td.free{color:#4a544c;font-size:12px;cursor:pointer;transition:.12s}
+.cal td.free:hover{background:#20261f}
+.cal td.free:hover:after{content:"予定を入れる";font-size:9px;color:var(--muted)}
+.cal td.blocked{background:#2b2320;color:#a08d7a;font-size:10px;cursor:pointer}
+.cal td.blocked:hover{background:#352b26}
+.sat{color:#7fc4ff!important}.sun{color:#ff8a80!important}
+.callegend{display:flex;gap:14px;font-size:11px;color:var(--muted);margin-bottom:10px;flex-wrap:wrap}
+.callegend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+
+/* ===== hotpepper-style calendar (customer / light) ===== */
+.calc{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12px}
+.calc th{border:1px solid var(--c-line);padding:7px 1px;font-size:10.5px;color:var(--c-muted);background:#f2f0e8;font-weight:700}
+.calc td{border:1px solid var(--c-line);height:40px;text-align:center;font-weight:900;vertical-align:middle}
+.calc .tm{background:#f2f0e8;color:var(--c-muted);font-family:'Bebas Neue';font-size:14px;width:42px;font-weight:400}
+.calc td.o{color:var(--c-accent);cursor:pointer;font-size:16px;transition:.12s}
+.calc td.o:hover{background:#e8f3ee}
+.calc td.o.sel{background:var(--c-accent);color:#fff}
+.calc td.x{color:#c9cec4;font-size:13px;font-weight:400}
+.calc td.mine{background:#e8f3ee;color:var(--c-accent);font-size:9.5px}
+.calc td.pend{background:#fdf6e3;color:#a3841c;font-size:9.5px}
+.calc-legend{display:flex;gap:12px;font-size:11px;color:var(--c-muted);margin:10px 0 0;flex-wrap:wrap;font-weight:700}
+
+/* ===== onboarding survey (customer / light) ===== */
+#scr-onboard{background:var(--c-bg);color:var(--c-ink);min-height:100vh}
+.qnum{font-size:11px;font-weight:700;color:var(--c-accent);letter-spacing:.08em;margin-bottom:4px}
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.qopt{border:1.5px solid var(--c-line);border-radius:12px;padding:13px 8px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;background:#fbfaf6;transition:.12s}
+.qopt:hover{border-color:var(--c-accent)}
+.qopt.sel{border-color:var(--c-accent);background:#e8f3ee;color:var(--c-accent)}
+.qtext{width:100%;border:1px solid var(--c-line);border-radius:12px;padding:12px 14px;font-family:inherit;font-size:14px;background:#fbfaf6;resize:none}
+.obdone{display:none;background:#e8f3ee;border:1px solid #bcd9cb;border-radius:14px;padding:16px;font-size:13px;line-height:1.9;color:#1d4534}
+.obdone b{color:var(--c-accent)}
+
+/* ===== booking (customer) ===== */
+.slotgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.slot{border:1.5px solid var(--c-line);border-radius:12px;padding:11px 6px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;background:#fbfaf6;transition:.15s}
+.slot:hover{border-color:var(--c-accent)}
+.slot.sel{border-color:var(--c-accent);background:#e8f3ee;color:var(--c-accent)}
+.slot .sd{font-size:11px;color:var(--c-muted);font-weight:700}
+.slot.sel .sd{color:var(--c-accent)}
+.mp-remain{display:flex;align-items:baseline;gap:10px;background:#f2f0e8;border-radius:12px;padding:12px 16px;margin-bottom:12px}
+.mp-remain .v{font-family:'Bebas Neue';font-size:34px;color:var(--c-accent)}
+.mp-remain .t{font-size:12px;color:var(--c-muted);font-weight:700}
+.mp-reqbtn{width:100%;background:var(--c-accent);color:#fff;border:0;border-radius:12px;padding:13px;font-weight:700;font-family:inherit;font-size:14px;cursor:pointer;margin-top:12px}
+.mp-reqbtn:disabled{background:#c9cec4;cursor:default}
+.mp-pending{display:none;background:#fdf6e3;border:1px solid #ecd9a0;border-radius:12px;padding:12px 14px;font-size:12.5px;line-height:1.7;margin-top:12px;color:#7a6420}
+.mp-pending b{color:#5c4a10}
+</style>
+</head>
+<body>
+
+<div class="mockbar">モックアップ（サンプルデータ表示中）— 実データ・LINE連携は未接続です</div>
+
+<nav class="topnav">
+  <span class="brand">COACH BASE<small>パーソナルトレーナー顧客管理</small></span>
+  <span class="navsp"></span>
+  <button class="tab on" data-scr="scr-dash">トレーナー：ダッシュボード</button>
+  <button class="tab" data-scr="scr-yoyaku">トレーナー：予約管理</button>
+  <button class="tab" data-scr="scr-karte">トレーナー：顧客カルテ</button>
+  <button class="tab customer" data-scr="scr-mypage">顧客：マイページ</button>
+  <button class="tab customer" data-scr="scr-onboard">顧客：初回アンケート</button>
+</nav>
+
+<!-- ================= SCREEN 1 : DASHBOARD ================= -->
+<section class="screen on" id="scr-dash">
+<div class="wrap">
+  <div class="pagehead">
+    <h1>ダッシュボード</h1>
+    <span class="date">2026年7月10日（木）／ 担当：森下トレーナー</span>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi hero">
+      <div class="label">月次売上（7月見込）</div>
+      <div class="val num">¥<em>1,284,000</em></div>
+      <div class="delta up">前月比 +6.2%</div>
+      <div class="formula">内訳：月額プラン14名 × 平均¥86,000 ＝ ¥1,204,000<br>＋ 都度セッション ¥80,000</div>
+    </div>
+    <div class="kpi">
+      <div class="label">継続率（前月→当月）</div>
+      <div class="val num">92.9<span class="unit">%</span></div>
+      <div class="delta up">前月 85.7%</div>
+      <div class="formula">継続13名 ÷ 前月末14名 ＝ 92.9%</div>
+    </div>
+    <div class="kpi">
+      <div class="label">平均顧客単価</div>
+      <div class="val num">¥91,714</div>
+      <div class="delta up">前月比 +¥3,120</div>
+      <div class="formula">月次売上 ¥1,284,000 ÷ 14名</div>
+    </div>
+    <div class="kpi">
+      <div class="label">LTV（平均）</div>
+      <div class="val num">¥825,426</div>
+      <div class="delta up">平均継続 9.0ヶ月</div>
+      <div class="formula">単価 ¥91,714 × 平均継続 9.0ヶ月</div>
+    </div>
+  </div>
+
+  <div class="alertstrip">
+    <b>解約予兆アラート：2名</b>
+    <span style="color:var(--muted)">佐藤さん（報告が5日途絶）／ 高橋さん（返信間隔が平均の3倍に増加）</span>
+    <span class="pill">対応する</span>
+  </div>
+
+  <div class="panelbox">
+    <div class="panelhead">
+      <h2>顧客一覧（14名）</h2>
+      <span class="hint">要ケア順 ／ タップでカルテ</span>
+    </div>
+    <div class="clist">
+      <div class="ccard">
+        <div class="cc-top"><span class="avatar">佐</span><span class="cc-name">佐藤 健一</span><span class="route r-insta">インスタ</span><span class="status s-bad cc-right"><span class="dot"></span>離脱予兆</span></div>
+        <div class="cc-mid">2026/3契約（5ヶ月目）・月8回・残 6/8回・目標まで 6.2kg</div>
+        <div class="cc-bot"><span style="color:var(--red);font-weight:700">最終やり取り 5日前</span><span class="num cc-money">¥480,000</span></div>
+      </div>
+      <div class="ccard">
+        <div class="cc-top"><span class="avatar">高</span><span class="cc-name">高橋 美咲</span><span class="route r-web">Web</span><span class="status s-bad cc-right"><span class="dot"></span>離脱予兆</span></div>
+        <div class="cc-mid">2026/5契約（3ヶ月目）・月4回・残 2/4回・目標まで 3.8kg</div>
+        <div class="cc-bot"><span style="color:var(--red);font-weight:700">最終やり取り 3日前</span><span class="num cc-money">¥168,000</span></div>
+      </div>
+      <div class="ccard">
+        <div class="cc-top"><span class="avatar">鈴</span><span class="cc-name">鈴木 大輔</span><span class="route r-ref">紹介</span><span class="status s-warn cc-right"><span class="dot"></span>要注意</span></div>
+        <div class="cc-mid">2025/12契約（8ヶ月目）・月4回・残 2/4回・目標まで 8.5kg</div>
+        <div class="cc-bot"><span>最終やり取り 昨日</span><span class="num cc-money">¥392,000</span></div>
+      </div>
+      <div class="ccard" onclick="go('scr-karte')">
+        <div class="cc-top"><span class="avatar">山</span><span class="cc-name">山田 太郎</span><span class="route r-insta">インスタ</span><span class="status s-good cc-right"><span class="dot"></span>好調</span></div>
+        <div class="cc-mid">2026/2契約（6ヶ月目）・月8回・残 3/8回・目標まで 4.4kg</div>
+        <div class="cc-bot"><span>最終やり取り 今日</span><span class="num cc-money">¥576,000</span></div>
+      </div>
+      <div class="ccard">
+        <div class="cc-top"><span class="avatar">伊</span><span class="cc-name">伊藤 さくら</span><span class="route r-insta">インスタ</span><span class="status s-good cc-right"><span class="dot"></span>好調</span></div>
+        <div class="cc-mid">2025/9契約（11ヶ月目）・月4回・残 1/4回・目標まで 1.2kg</div>
+        <div class="cc-bot"><span>最終やり取り 今日</span><span class="num cc-money">¥528,000</span></div>
+      </div>
+      <div class="ccard">
+        <div class="cc-top"><span class="avatar">渡</span><span class="cc-name">渡辺 翔</span><span class="route r-ref">紹介</span><span class="status s-good cc-right"><span class="dot"></span>好調</span></div>
+        <div class="cc-mid">2025/11契約（9ヶ月目）・月8回・残 4/8回・増量 +2.1kg</div>
+        <div class="cc-bot"><span>最終やり取り 今日</span><span class="num cc-money">¥864,000</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panelbox">
+    <div class="panelhead">
+      <h2>SNS経由・初月レベニューシェア（50%）</h2>
+      <span class="hint">経路＝インスタの顧客のみ自動抽出 ／ 対象は契約日から1ヶ月間（応当日の前日まで）の請求額のみ・その50%</span>
+    </div>
+    <div class="clist">
+      <div class="ccard" style="cursor:default;border-color:#3a4630">
+        <div class="cc-top"><span class="avatar">加</span><span class="cc-name">加藤 悠真</span><span class="status s-good cc-right"><span class="dot"></span>今月確定</span></div>
+        <div class="cc-mid">契約 2026/6/3 ／ 対象期間 6/3 〜 7/2（初月のみ）</div>
+        <div class="cc-bot"><span>初月 ¥72,000 × 50%</span><span class="num cc-money" style="color:var(--accent)">¥36,000</span></div>
+      </div>
+      <div class="ccard" style="cursor:default">
+        <div class="cc-top"><span class="avatar">小</span><span class="cc-name">小林 芽衣</span><span class="cc-right mini">6月 支払済</span></div>
+        <div class="cc-mid">契約 2026/5/8 ／ 対象期間 5/8 〜 6/7</div>
+        <div class="cc-bot"><span>初月 ¥48,000 × 50%</span><span class="num cc-money">¥24,000</span></div>
+      </div>
+      <div class="ccard" style="cursor:default">
+        <div class="cc-top"><span class="avatar">中</span><span class="cc-name">中村 蓮</span><span class="cc-right mini">5月 支払済</span></div>
+        <div class="cc-mid">契約 2026/4/15 ／ 対象期間 4/15 〜 5/14</div>
+        <div class="cc-bot"><span>初月 ¥56,000 × 50%</span><span class="num cc-money">¥28,000</span></div>
+      </div>
+      <div class="ccard" style="cursor:default">
+        <div class="cc-top"><span class="avatar">佐</span><span class="cc-name">佐藤 健一</span><span class="cc-right mini">4月 支払済</span></div>
+        <div class="cc-mid">契約 2026/3/10 ／ 対象期間 3/10 〜 4/9</div>
+        <div class="cc-bot"><span>初月 ¥96,000 × 50%</span><span class="num cc-money">¥48,000</span></div>
+      </div>
+      <div class="ccard" style="cursor:default">
+        <div class="cc-top"><span class="avatar">山</span><span class="cc-name">山田 太郎</span><span class="cc-right mini">3月 支払済</span></div>
+        <div class="cc-mid">契約 2026/2/1 ／ 対象期間 2/1 〜 2/28</div>
+        <div class="cc-bot"><span>初月 ¥96,000 × 50%</span><span class="num cc-money">¥48,000</span></div>
+      </div>
+      <div class="ccard" style="cursor:default">
+        <div class="cc-top"><span class="avatar">伊</span><span class="cc-name">伊藤 さくら</span><span class="cc-right mini">2025/11 支払済</span></div>
+        <div class="cc-mid">契約 2025/9/20 ／ 対象期間 9/20 〜 10/19</div>
+        <div class="cc-bot"><span>初月 ¥48,000 × 50%</span><span class="num cc-money">¥24,000</span></div>
+      </div>
+    </div>
+    <div class="padbox" style="border-top:1px solid var(--line)">
+      <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-end">
+        <div><div class="mini">今月の確定シェア</div><div class="num" style="font-size:32px;color:var(--accent)">¥36,000</div><div class="mini">加藤さん 初月 ¥72,000 × 50%（初月期間が7/2に完了）</div></div>
+        <div><div class="mini">累計シェア支払額</div><div class="num" style="font-size:32px">¥208,000</div><div class="mini">48,000＋48,000＋24,000＋28,000＋24,000＋36,000（6件）</div></div>
+        <div style="flex:1;min-width:200px">
+          <div class="mini" style="margin-bottom:6px">2ヶ月目以降の請求はシェア対象外（自動で除外されます）</div>
+          <ul class="loglist" style="font-size:12px">
+            <li><span class="d">7月</span>新規1件 → <b style="color:var(--accent)">¥36,000</b></li>
+            <li><span class="d">6月</span>新規1件 → ¥24,000</li>
+            <li><span class="d">5月</span>新規1件 → ¥28,000</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="panelbox">
+      <div class="panelhead"><h2>集客経路の内訳（14名）</h2><span class="hint">カルテの経路から自動集計</span></div>
+      <div class="padbox">
+        <div style="display:grid;gap:14px">
+          <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px"><span><span class="route r-insta">インスタ</span></span><b>6名（42.9%）</b></div><div class="bar" style="width:100%"><i style="width:42.9%;background:#ff7ab8"></i></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px"><span><span class="route r-ref">紹介</span></span><b>4名（28.6%）</b></div><div class="bar" style="width:100%"><i style="width:28.6%;background:#7fc4ff"></i></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px"><span><span class="route r-web">Web</span></span><b>4名（28.6%）</b></div><div class="bar" style="width:100%"><i style="width:28.6%;background:#8a948c"></i></div></div>
+        </div>
+        <p class="srcnote">6＋4＋4＝14名。経路別の<b>継続率・累計売上</b>も同じデータから集計できます</p>
+      </div>
+    </div>
+    <div class="panelbox">
+      <div class="panelhead"><h2>今日の要対応</h2></div>
+      <div class="padbox">
+        <ul class="timeline">
+          <li><span class="d">09:12</span>佐藤さんが5日間未報告 → 声かけの連絡を推奨</li>
+          <li><span class="d">10:40</span>山田さん 膝の違和感の報告 → <b style="color:var(--red)">本人対応が必要</b></li>
+          <li><span class="d">11:05</span>伊藤さん 目標体重の変更申請（52→50kg）承認待ち</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ================= SCREEN 1.5 : BOOKING (TRAINER) ================= -->
+<section class="screen" id="scr-yoyaku">
+<div class="wrap">
+  <div class="pagehead">
+    <h1>予約管理</h1>
+    <span class="date">7月12日（土）〜 7月18日（金）／ 顧客には空き枠のみ表示されるため、申請時点でダブルブッキングは発生しません</span>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <div class="panelbox">
+        <div class="panelhead"><h2>承認待ちの申請（2件）</h2><span class="hint">承認するとLINEで顧客に確定通知が届きます</span></div>
+        <div class="padbox">
+
+          <div class="reqcard" id="req1">
+            <div class="who">山田 太郎 <span class="route r-insta">インスタ</span></div>
+            <div class="when">7/15（火）19:00 - 20:00</div>
+            <div class="reqmeta">
+              残回数：<b>今月あと3回</b>（8回中5回消化）<br>
+              前回のトレーニング：<b>下半身（スクワット 82.5kg 自己ベスト更新）</b><br>
+              前回話した内容：<b>右膝の違和感／残業続きで夕食が遅い</b>
+            </div>
+            <div class="reqbtns">
+              <button class="btn-ok" onclick="approve('req1','山田さんの 7/15（火）19:00 を確定しました。LINEで確定通知を送信済みです。')">承認して確定</button>
+              <button class="btn-alt">別日を提案</button>
+            </div>
+          </div>
+
+          <div class="reqcard" id="req2">
+            <div class="who">伊藤 さくら <span class="route r-insta">インスタ</span></div>
+            <div class="when">7/16（水）20:00 - 21:00</div>
+            <div class="reqmeta">
+              残回数：<b style="color:var(--amber)">今月あと1回</b>（4回中3回消化）→ 更新提案のタイミング<br>
+              前回のトレーニング：<b>背中・二の腕（ラットプルダウン 35kg）</b><br>
+              前回話した内容：<b>8月に沖縄旅行。それまでに-1kgが目標</b>
+            </div>
+            <div class="reqbtns">
+              <button class="btn-ok" onclick="approve('req2','伊藤さんの 7/16（水）20:00 を確定しました。LINEで確定通知を送信済みです。')">承認して確定</button>
+              <button class="btn-alt">別日を提案</button>
+            </div>
+          </div>
+
+          <p class="srcnote">残回数・前回内容は<b>自動集計・自動表示</b>されます（プラン回数 − 消化済み確定予約／直近のセッション記録から引用）</p>
+        </div>
+      </div>
+
+      <div class="panelbox">
+        <div class="panelhead"><h2>セッション後のひとことメモ</h2><span class="hint">次回の予約カードに自動で表示されます</span></div>
+        <div class="padbox">
+          <ul class="loglist">
+            <li><span class="d">7/09</span><b>山田さん</b>：下半身。膝は動作中の痛みなし、様子見 <span class="pr">次回に表示</span></li>
+            <li><span class="d">7/08</span><b>渡辺さん</b>：増量順調。ベンチ+2.5kg。就活の話</li>
+          </ul>
+          <div class="inputrow"><input placeholder="例：山田さん 下半身。膝OK。次回は重量維持…"><button>記録</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panelbox">
+      <div class="panelhead"><h2>週間カレンダー（7/12 - 7/18）</h2><span class="hint">確定6件・承認待ち2件</span></div>
+      <div class="padbox">
+        <div class="callegend">
+          <span><i style="background:#24301f;border:1px solid var(--accent-dim)"></i>確定</span>
+          <span><i style="background:#3a2f12;border:1px solid #8a6c2c"></i>承認待ち</span>
+          <span><i style="background:transparent;border:1px solid var(--line)"></i>空き枠（顧客に表示）</span>
+          <span><i style="background:#2b2320;border:1px solid #4a3c32"></i>自分の予定（ブロック）</span>
+          <span><i style="background:#141816;border:1px solid var(--line)"></i>定休日</span>
+        </div>
+        <table class="cal" id="tcal"></table>
+        <p class="srcnote">営業時間内はすべて<b>デフォルトで空き枠</b>。空きマスをクリックすると「自分の予定」としてブロックでき、顧客側では即座に「×」になります。もう一度クリックで解除。顧客のマイページには<b>空き枠だけ</b>が「○」表示され、名前は一切見えません</p>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;margin-top:16px;border-top:1px dashed var(--line);padding-top:14px">
+          <div><div class="mini">今日のセッション</div><div class="num" style="font-size:28px">1<span style="font-size:13px;color:var(--muted)">件</span></div></div>
+          <div><div class="mini">今週の稼働</div><div class="num" style="font-size:28px">8<span style="font-size:13px;color:var(--muted)">/48枠</span></div><div class="mini">確定6＋承認待ち2 ÷ 8枠×6営業日</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ================= SCREEN 2 : KARTE ================= -->
+<section class="screen" id="scr-karte">
+<div class="wrap">
+  <span class="backlink" onclick="go('scr-dash')">← 顧客一覧に戻る</span>
+
+  <div class="kartehead">
+    <div class="bigavatar">山</div>
+    <div>
+      <h1>山田 太郎（34）<span class="route r-insta" style="margin-left:10px">インスタ経由</span></h1>
+      <div class="sub">月8回プラン ／ 2026年2月開始（在籍6ヶ月目）／ 目的：減量・健康診断対策 ／ 集客：Instagram広告 → 体験（2026/1/25）</div>
+    </div>
+    <div class="goalchips">
+      <div class="chip"><div class="t">契約開始</div><div class="v">2026/2<small style="font-size:12px">（6ヶ月目）</small></div></div>
+      <div class="chip"><div class="t">現在体重</div><div class="v">72.4<small style="font-size:13px">kg</small></div></div>
+      <div class="chip"><div class="t">目標体重</div><div class="v"><em>68.0</em><small style="font-size:13px">kg</small></div></div>
+      <div class="chip"><div class="t">今月残回数</div><div class="v">3<small style="font-size:13px">/8回</small></div></div>
+      <div class="chip"><div class="t">累計売上</div><div class="v">¥576,000</div></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <div class="panelbox">
+        <div class="panelhead"><h2>体重推移（12週）</h2><span class="hint">開始 78.0kg → 現在 72.4kg（-5.6kg）</span></div>
+        <div class="padbox">
+          <div class="legend"><span><i style="background:var(--accent)"></i>実測</span><span><i style="background:#4a5a50"></i>目標ライン 68.0kg</span></div>
+          <svg id="chart-trainer" viewBox="0 0 640 230" width="100%"></svg>
+          <p class="srcnote">データ元：<b>LINE自動</b> 34件 ／ <b>本人入力</b> 8件 ／ <b>セッション計測</b> 6件</p>
+        </div>
+      </div>
+
+      <div class="panelbox">
+        <div class="panelhead"><h2>AIによる今週の要約</h2><span class="hint">会話ログから自動生成 7/9</span></div>
+        <div class="padbox aisum">
+          <p><span class="tag">食事</span>平日の自炊は継続。ただし水・木は残業で夕食が22時以降になりコンビニ食が2回。タンパク質は目標120gに対し平均104g。</p>
+          <p style="margin-top:8px"><span class="tag">運動</span>自主トレ4回（先週比+1）。スクワットのフォーム改善がみられる。</p>
+          <p style="margin-top:8px"><span class="tag">注意</span>7/8に「階段で右膝に違和感」の報告あり。<b style="color:var(--red)">次回セッションで確認要。</b></p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="panelbox">
+        <div class="panelhead"><h2>契約・売上履歴（手入力）</h2><span class="hint">累計 ¥576,000</span></div>
+        <div class="padbox">
+          <div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:6px">
+            <div><div class="mini">累計売上</div><div class="num" style="font-size:30px;color:var(--accent)">¥576,000</div><div class="mini">月8回 ¥96,000 × 6ヶ月</div></div>
+            <div><div class="mini">今月の消化</div><div class="num" style="font-size:30px">5<span style="font-size:14px;color:var(--muted)">/8回</span></div><div class="mini">残3回 ／ 予約1件 承認待ち</div></div>
+          </div>
+          <ul class="loglist">
+            <li><span class="d">7/01</span>7月分入金 ¥96,000</li>
+            <li><span class="d">5/01</span>継続更新（3ヶ月・月8回 ¥96,000）</li>
+            <li><span class="d">2/01</span>入会契約 月8回プラン ¥96,000/月 <span class="pr">インスタ経由</span></li>
+          </ul>
+          <div class="inputrow"><input placeholder="契約・入金を記録（例：8月分入金 ¥96,000）…"><button>追加</button></div>
+        </div>
+      </div>
+
+      <div class="panelbox">
+        <div class="panelhead"><h2>トレーニング記録</h2><span class="hint">LINE報告から自動抽出</span></div>
+        <div class="padbox">
+          <ul class="loglist">
+            <li><span class="d">7/09</span>スクワット 82.5kg 8×3 <span class="pr">自己ベスト</span></li>
+            <li><span class="d">7/07</span>ベンチプレス 65kg 8×3</li>
+            <li><span class="d">7/05</span>デッドリフト 100kg 5×3</li>
+            <li><span class="d">7/03</span>ランニング 5.2km 31分</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panelbox">
+        <div class="panelhead"><h2>指導履歴</h2></div>
+        <div class="padbox">
+          <ul class="timeline">
+            <li><span class="d">7/06</span>夕食が遅い日は「先にプロテイン＋帰宅後は軽め」の運用に変更</li>
+            <li><span class="d">6/28</span>有酸素を週1→週2に増量</li>
+            <li><span class="d">6/15</span>糖質は落とさず脂質コントロールに方針決定</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panelbox">
+        <div class="panelhead"><h2>トレーナーメモ（手入力）</h2></div>
+        <div class="padbox">
+          <ul class="loglist">
+            <li><span class="d">7/02</span>体脂肪 21.8%（InBody）／ 腹囲 84.5cm</li>
+            <li><span class="d">6/04</span>体脂肪 23.1% ／ 腹囲 87.0cm</li>
+          </ul>
+          <div class="inputrow"><input placeholder="セッションメモ・計測値を入力…"><button>追加</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ================= SCREEN 3 : CUSTOMER MYPAGE ================= -->
+<section class="screen" id="scr-mypage">
+<div class="phone">
+  <div class="mp-head">
+    <div class="hello">MY PAGE ／ 森下トレーナー</div>
+    <h1>山田さん、こんにちは</h1>
+    <div style="font-size:12px;color:var(--c-muted);font-weight:700;margin-top:4px">2026年2月スタート — トレーニング6ヶ月目</div>
+  </div>
+
+  <div class="mp-hero">
+    <div class="t">目標体重まで</div>
+    <div class="big">あと 4.4<small> kg</small></div>
+    <div class="sub">現在 72.4kg → 目標 68.0kg（10月末）</div>
+    <div class="mp-progress"><i></i></div>
+    <div class="mp-progress-label"><span>スタート 78.0kg</span><span>達成率 56%（5.6 ÷ 10.0kg）</span></div>
+  </div>
+
+  <div class="mp-card">
+    <h2>体重の推移</h2>
+    <svg id="chart-customer" viewBox="0 0 380 200" width="100%"></svg>
+  </div>
+
+  <div class="mp-card">
+    <h2>今日の体重を記録</h2>
+    <div class="mp-input"><input type="number" inputmode="decimal" placeholder="72.2" id="winput"><button onclick="document.getElementById('saved').style.display='block'">記録する</button></div>
+    <div class="saved" id="saved">記録しました。グラフに反映されます。</div>
+    <p class="mp-note">LINEで送っても、ここで入力してもOK。どちらも同じグラフに反映されます。</p>
+  </div>
+
+  <div class="mp-card">
+    <h2>今週のあなた</h2>
+    <div class="mp-stats">
+      <div class="mp-stat"><div class="v">4</div><div class="t">筋トレ回数</div></div>
+      <div class="mp-stat"><div class="v">-0.7<span style="font-size:14px">kg</span></div><div class="t">今週の変化</div></div>
+      <div class="mp-stat"><div class="v">104<span style="font-size:14px">g</span></div><div class="t">平均タンパク質</div></div>
+    </div>
+  </div>
+
+  <div class="mp-card">
+    <h2>自己ベスト</h2>
+    <ul class="mp-best">
+      <li>スクワット <span class="v">82.5kg（7/9 更新）</span></li>
+      <li>ベンチプレス <span class="v">67.5kg</span></li>
+      <li>デッドリフト <span class="v">105kg</span></li>
+    </ul>
+  </div>
+
+  <div class="mp-card">
+    <h2>トレーナーからの今週のアドバイス</h2>
+    <p class="mp-advice">残業の日が続いても、先に<b>プロテインだけ先取り</b>する運用ができていて素晴らしいです。今週はスクワットのフォームがかなり良くなりました。右膝の違和感は無理せず、次のセッションで一緒に確認しましょう。</p>
+    <div class="mp-from">— 森下トレーナー（7/9）</div>
+  </div>
+
+  <div class="mp-card">
+    <h2>次回セッション</h2>
+    <div class="mp-session">
+      <div class="datebox"><div class="m">JUL</div><div class="d">12</div></div>
+      <div class="info"><b>7月12日（土）10:00 - 11:00</b><br>下半身＋膝チェック ／ 確定済み</div>
+    </div>
+  </div>
+
+  <div class="mp-card">
+    <h2>予約を取る</h2>
+    <div class="mp-remain"><span class="v">3</span><span class="t">今月の残りセッション（8回中5回消化）</span></div>
+    <p class="mp-note" style="margin:0 0 10px">○の枠をタップして申請できます。7/12 - 7/18の空き状況：</p>
+    <table class="calc" id="ccal"></table>
+    <div class="calc-legend">
+      <span style="color:var(--c-accent)">○ 予約できます</span>
+      <span>× 予約できません</span>
+      <span>− 定休日</span>
+    </div>
+    <button class="mp-reqbtn" id="reqbtn" disabled onclick="requestSlot()">○の枠を選んで予約を申請</button>
+    <div class="mp-pending" id="pending"></div>
+  </div>
+</div>
+</section>
+
+<!-- ================= SCREEN 4 : ONBOARDING SURVEY ================= -->
+<section class="screen" id="scr-onboard">
+<div class="phone">
+  <div class="mp-head">
+    <div class="hello">はじめまして ／ 森下トレーナー</div>
+    <h1>最初に3つだけ<br>教えてください</h1>
+    <div style="font-size:12px;color:var(--c-muted);font-weight:700;margin-top:6px">1分で終わります。あなた専用のカルテを作るために使います。</div>
+  </div>
+
+  <div class="mp-card">
+    <div class="qnum">Q1 ／ 必須</div>
+    <h2>森下トレーナーを何で知りましたか？</h2>
+    <div class="qgrid" id="q1">
+      <div class="qopt" onclick="qpick(this)">Instagram</div>
+      <div class="qopt" onclick="qpick(this)">知人の紹介</div>
+      <div class="qopt" onclick="qpick(this)">Webサイト・検索</div>
+      <div class="qopt" onclick="qpick(this)">その他</div>
+    </div>
+  </div>
+
+  <div class="mp-card">
+    <div class="qnum">Q2</div>
+    <h2>目標を教えてください</h2>
+    <div class="qgrid" id="q2">
+      <div class="qopt" onclick="qpick(this)">減量したい</div>
+      <div class="qopt" onclick="qpick(this)">筋肉をつけたい</div>
+      <div class="qopt" onclick="qpick(this)">健康維持</div>
+      <div class="qopt" onclick="qpick(this)">姿勢・体の悩み</div>
+    </div>
+    <div style="margin-top:10px">
+      <div class="mp-input"><input type="number" inputmode="decimal" placeholder="目標体重（任意） 例: 68" id="q2w"><span style="align-self:center;font-size:13px;color:var(--c-muted);font-weight:700">kg</span></div>
+    </div>
+  </div>
+
+  <div class="mp-card">
+    <div class="qnum">Q3 ／ 任意</div>
+    <h2>気になること・伝えておきたいこと</h2>
+    <textarea class="qtext" rows="3" placeholder="例: 腰痛持ちです／夜は21時以降しか空いていません"></textarea>
+  </div>
+
+  <button class="mp-reqbtn" style="margin-top:0" onclick="submitSurvey()">回答してはじめる</button>
+  <div class="obdone" id="obdone"></div>
+  <p class="mp-note" style="margin-top:10px">回答はトレーナーだけが見られます。あとからマイページで変更を申請できます。</p>
+</div>
+</section>
+
+<script>
+// ---- tab switching ----
+const tabs=document.querySelectorAll('.tab');
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
+  tabs.forEach(t=>t.classList.toggle('on',t.dataset.scr===id));
+  window.scrollTo({top:0});
+}
+tabs.forEach(t=>t.addEventListener('click',()=>go(t.dataset.scr)));
+
+// ---- onboarding survey ----
+function qpick(el){
+  el.parentElement.querySelectorAll('.qopt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function submitSurvey(){
+  const g=id=>{const s=document.querySelector('#'+id+' .qopt.sel');return s?s.textContent:'未回答';};
+  const route=g('q1'), goal=g('q2');
+  const w=document.getElementById('q2w').value;
+  const d=document.getElementById('obdone');
+  d.style.display='block';
+  d.innerHTML='登録しました。カルテが自動で作成されます。<br>'
+    +'経路：<b>'+route+'</b>（レベニューシェア集計にもこの回答が使われます）<br>'
+    +'目標：<b>'+goal+(w?'・目標体重 '+w+'kg':'')+'</b>';
+  d.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+// ---- booking: trainer approve ----
+function approve(id,msg){
+  document.getElementById(id).innerHTML='<div class="confirmed-msg">確定しました — '+msg+'</div>';
+}
+
+// ---- booking calendar data ----
+const DAYS=[
+  {d:'7/12',w:'土'},{d:'7/13',w:'日',closed:true},{d:'7/14',w:'月'},
+  {d:'7/15',w:'火'},{d:'7/16',w:'水'},{d:'7/17',w:'木'},{d:'7/18',w:'金'}
+];
+const TIMES=['10:00','11:00','13:00','14:00','16:00','18:00','19:00','20:00'];
+const BOOK={
+  '7/12 10:00':{n:'山田',st:'ok'},
+  '7/12 13:00':{n:'渡辺',st:'ok'},
+  '7/14 19:00':{n:'鈴木',st:'ok'},
+  '7/15 19:00':{n:'山田',st:'wait'},
+  '7/16 11:00':{n:'高橋',st:'ok'},
+  '7/16 20:00':{n:'伊藤',st:'wait'},
+  '7/17 20:00':{n:'佐藤',st:'ok'},
+  '7/18 18:00':{n:'伊藤',st:'ok'}
+};
+const ME='山田'; // マイページを見ている顧客
+// トレーナーが自己都合でブロックした枠（クリックで増減）
+const BLOCKED=new Set(['7/14 10:00','7/14 11:00','7/17 13:00']);
+function toggleBlock(key){
+  if(BLOCKED.has(key))BLOCKED.delete(key);else BLOCKED.add(key);
+  renderTrainerCal();renderCustomerCal();
+}
+
+function calHead(){
+  return '<tr><th></th>'+DAYS.map(d=>`<th class="${d.w==='土'?'sat':d.w==='日'?'sun':''}">${d.d}<br>${d.w}</th>`).join('')+'</tr>';
+}
+function renderTrainerCal(){
+  let h=calHead();
+  TIMES.forEach(t=>{
+    h+=`<tr><td class="tm">${t}</td>`;
+    DAYS.forEach(d=>{
+      if(d.closed){h+='<td class="closed">休</td>';return;}
+      const key=d.d+' '+t, b=BOOK[key];
+      if(b){h+=b.st==='ok'?`<td class="ok">${b.n}</td>`:`<td class="wait">${b.n}<br>申請</td>`;}
+      else if(BLOCKED.has(key))h+=`<td class="blocked" onclick="toggleBlock('${key}')">予定</td>`;
+      else h+=`<td class="free" onclick="toggleBlock('${key}')"></td>`;
+    });
+    h+='</tr>';
+  });
+  document.getElementById('tcal').innerHTML=h;
+}
+function renderCustomerCal(){
+  let h=calHead();
+  TIMES.forEach(t=>{
+    h+=`<tr><td class="tm">${t}</td>`;
+    DAYS.forEach(d=>{
+      if(d.closed){h+='<td class="x">−</td>';return;}
+      const key=d.d+' '+t, b=BOOK[key];
+      if(BLOCKED.has(key)){h+='<td class="x">×</td>';return;}
+      if(b){
+        if(b.n===ME&&b.st==='ok')h+='<td class="mine">予約済</td>';
+        else if(b.n===ME&&b.st==='wait')h+='<td class="pend">申請中</td>';
+        else h+='<td class="x">×</td>';
+      }else{
+        h+=`<td class="o" data-label="${d.d}（${d.w}）${t}" onclick="pick(this)">○</td>`;
+      }
+    });
+    h+='</tr>';
+  });
+  document.getElementById('ccal').innerHTML=h;
+}
+renderTrainerCal();
+renderCustomerCal();
+
+// ---- booking: customer request ----
+let selSlot=null;
+function pick(el){
+  document.querySelectorAll('.calc td.o').forEach(s=>s.classList.remove('sel'));
+  el.classList.add('sel');
+  selSlot=el.dataset.label;
+  const b=document.getElementById('reqbtn');
+  b.disabled=false;
+  b.textContent=selSlot+' で予約を申請する';
+}
+function requestSlot(){
+  if(!selSlot)return;
+  const c=document.querySelector('.calc td.o.sel');
+  if(c){c.classList.remove('o','sel');c.classList.add('pend');c.textContent='申請中';c.onclick=null;}
+  const p=document.getElementById('pending');
+  p.style.display='block';
+  p.innerHTML='<b>'+selSlot+'</b> で申請しました。<br>森下トレーナーの承認後に確定します（承認待ち）。確定するとLINEに通知が届きます。';
+  const b=document.getElementById('reqbtn');
+  b.disabled=true;
+  b.textContent='申請済み（承認待ち）';
+  selSlot=null;
+}
+
+// ---- chart renderer ----
+const weights=[78.0,77.4,77.6,76.8,76.1,75.5,75.8,74.9,74.2,73.6,73.1,72.4];
+const GOAL=68.0;
+function drawChart(svgId,W,H,dark){
+  const svg=document.getElementById(svgId);
+  const padL=38,padR=14,padT=16,padB=26;
+  const min=66.5,max=79;
+  const x=i=>padL+i*(W-padL-padR)/(weights.length-1);
+  const y=v=>padT+(max-v)*(H-padT-padB)/(max-min);
+  let el='';
+  const grid=dark?'#2c342e':'#e5e1d6', txt=dark?'#8a948c':'#7a8279';
+  const line=dark?'#d4f53c':'#0e6b45', goal=dark?'#4a5a50':'#b9c4b6';
+  // gridlines
+  [78,74,70].forEach(v=>{
+    el+=`<line x1="${padL}" y1="${y(v)}" x2="${W-padR}" y2="${y(v)}" stroke="${grid}" stroke-dasharray="3 4"/>`;
+    el+=`<text x="${padL-6}" y="${y(v)+4}" fill="${txt}" font-size="10" text-anchor="end">${v}</text>`;
+  });
+  // goal line
+  el+=`<line x1="${padL}" y1="${y(GOAL)}" x2="${W-padR}" y2="${y(GOAL)}" stroke="${goal}" stroke-width="2" stroke-dasharray="6 5"/>`;
+  el+=`<text x="${W-padR}" y="${y(GOAL)-6}" fill="${txt}" font-size="10" text-anchor="end">目標 68.0</text>`;
+  // area fill
+  let pts=weights.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
+  el+=`<polygon points="${x(0)},${H-padB} ${pts} ${x(weights.length-1)},${H-padB}" fill="${line}" opacity="0.08"/>`;
+  el+=`<polyline points="${pts}" fill="none" stroke="${line}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+  weights.forEach((v,i)=>{
+    el+=`<circle cx="${x(i)}" cy="${y(v)}" r="${i===weights.length-1?4.5:2.6}" fill="${line}"/>`;
+  });
+  const last=weights.length-1;
+  el+=`<text x="${x(last)-8}" y="${y(weights[last])-10}" fill="${line}" font-size="12" font-weight="700" text-anchor="end">72.4kg</text>`;
+  // month labels
+  [[0,'4月'],[4,'5月'],[8,'6月'],[11,'7月']].forEach(([i,m])=>{
+    el+=`<text x="${x(i)}" y="${H-8}" fill="${txt}" font-size="10" text-anchor="middle">${m}</text>`;
+  });
+  svg.innerHTML=el;
+}
+drawChart('chart-trainer',640,230,true);
+drawChart('chart-customer',380,200,false);
+</script>
+</body>
+</html>
