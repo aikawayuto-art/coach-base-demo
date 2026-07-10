@@ -216,6 +216,17 @@ svg text{font-family:'Zen Kaku Gothic New'}
 .cal td.free:hover:after{content:"予定を入れる";font-size:9px;color:var(--muted)}
 .cal td.blocked{background:#2b2320;color:#a08d7a;font-size:10px;cursor:pointer}
 .cal td.blocked:hover{background:#352b26}
+
+/* ===== slot action sheet ===== */
+.sheetbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:flex-end;justify-content:center}
+.sheetbg.on{display:flex}
+.sheet{background:var(--panel);border:1px solid var(--line);border-bottom:0;border-radius:18px 18px 0 0;padding:20px 18px 30px;width:100%;max-width:480px}
+.sheet .when{font-family:'Bebas Neue';font-size:24px;color:var(--accent);letter-spacing:.03em;margin-bottom:14px}
+.sheet label{font-size:11px;color:var(--muted);font-weight:700;display:block;margin-bottom:6px}
+.sheet select{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--text);font-family:inherit;font-size:14px;margin-bottom:10px}
+.sheet .btn-ok{width:100%;padding:13px;font-size:14px}
+.sheet .btn-blk{width:100%;margin-top:8px;background:#2b2320;border:1px solid #4a3c32;color:#c9b8a6;font-weight:700;border-radius:10px;padding:13px;cursor:pointer;font-family:inherit;font-size:13px}
+.sheet .btn-cancel{width:100%;margin-top:8px;background:transparent;border:0;color:var(--muted);font-weight:700;padding:10px;cursor:pointer;font-family:inherit;font-size:13px}
 .sat{color:#7fc4ff!important}.sun{color:#ff8a80!important}
 .callegend{display:flex;gap:14px;font-size:11px;color:var(--muted);margin-bottom:10px;flex-wrap:wrap}
 .callegend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px}
@@ -501,7 +512,7 @@ svg text{font-family:'Zen Kaku Gothic New'}
           <span><i style="background:#141816;border:1px solid var(--line)"></i>定休日</span>
         </div>
         <table class="cal" id="tcal"></table>
-        <p class="srcnote">営業時間内はすべて<b>デフォルトで空き枠</b>。空きマスをクリックすると「自分の予定」としてブロックでき、顧客側では即座に「×」になります。もう一度クリックで解除。顧客のマイページには<b>空き枠だけ</b>が「○」表示され、名前は一切見えません</p>
+        <p class="srcnote">営業時間内はすべて<b>デフォルトで空き枠</b>。空きマスをタップすると「<b>顧客の予約を入れる</b>（対面や電話で決まった分）／<b>自分の予定でブロック</b>」を選べます。ブロックはもう一度タップで解除。どちらも顧客側では即座に「×」になり、マイページには<b>空き枠だけ</b>が「○」表示されます（名前は一切見えません）</p>
         <div style="display:flex;gap:24px;flex-wrap:wrap;margin-top:16px;border-top:1px dashed var(--line);padding-top:14px">
           <div><div class="mini">今日のセッション</div><div class="num" style="font-size:28px">1<span style="font-size:13px;color:var(--muted)">件</span></div></div>
           <div><div class="mini">今週の稼働</div><div class="num" style="font-size:28px">8<span style="font-size:13px;color:var(--muted)">/48枠</span></div><div class="mini">確定6＋承認待ち2 ÷ 8枠×6営業日</div></div>
@@ -691,6 +702,21 @@ svg text{font-family:'Zen Kaku Gothic New'}
 </div>
 </section>
 
+<!-- ===== slot action sheet (trainer) ===== -->
+<div class="sheetbg" id="sheetbg" onclick="if(event.target===this)closeSheet()">
+  <div class="sheet">
+    <div class="when" id="sheet-when"></div>
+    <label>顧客の予約を入れる（対面・電話で決まった分）</label>
+    <select id="sheet-cust">
+      <option>山田</option><option>佐藤</option><option>高橋</option><option>鈴木</option>
+      <option>伊藤</option><option>渡辺</option><option>中村</option><option>小林</option><option>加藤</option>
+    </select>
+    <button class="btn-ok" onclick="sheetBook()">この顧客で予約を確定</button>
+    <button class="btn-blk" onclick="sheetBlock()">自分の予定でブロック</button>
+    <button class="btn-cancel" onclick="closeSheet()">キャンセル</button>
+  </div>
+</div>
+
 <!-- ================= SCREEN 4 : ONBOARDING SURVEY ================= -->
 <section class="screen" id="scr-onboard">
 <div class="phone">
@@ -803,6 +829,22 @@ function toggleBlock(key){
   if(BLOCKED.has(key))BLOCKED.delete(key);else BLOCKED.add(key);
   renderTrainerCal();renderCustomerCal();
 }
+// 空きマスタップ → 予約 or ブロックを選ぶシート
+let slotKey=null;
+function openSlot(key,label){
+  slotKey=key;
+  document.getElementById('sheet-when').textContent=label;
+  document.getElementById('sheetbg').classList.add('on');
+}
+function closeSheet(){document.getElementById('sheetbg').classList.remove('on')}
+function sheetBook(){
+  BOOK[slotKey]={n:document.getElementById('sheet-cust').value,st:'ok'};
+  closeSheet();renderTrainerCal();renderCustomerCal();
+}
+function sheetBlock(){
+  BLOCKED.add(slotKey);
+  closeSheet();renderTrainerCal();renderCustomerCal();
+}
 
 function calHead(){
   return '<tr><th></th>'+DAYS.map(d=>`<th class="${d.w==='土'?'sat':d.w==='日'?'sun':''}">${d.d}<br>${d.w}</th>`).join('')+'</tr>';
@@ -816,7 +858,7 @@ function renderTrainerCal(){
       const key=d.d+' '+t, b=BOOK[key];
       if(b){h+=b.st==='ok'?`<td class="ok">${b.n}</td>`:`<td class="wait">${b.n}<br>申請</td>`;}
       else if(BLOCKED.has(key))h+=`<td class="blocked" onclick="toggleBlock('${key}')">予定</td>`;
-      else h+=`<td class="free" onclick="toggleBlock('${key}')"></td>`;
+      else h+=`<td class="free" onclick="openSlot('${key}','${d.d}（${d.w}）${t}')"></td>`;
     });
     h+='</tr>';
   });
